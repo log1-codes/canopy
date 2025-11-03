@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { MessageCircle, Layers, FileText, Users } from "lucide-react"
 import { useState, useEffect } from "react"
-
+import { useRouter } from "next/navigation";
 const features = [
   {
     icon: MessageCircle,
@@ -27,6 +27,8 @@ const features = [
 ]
 
 export default function Home() {
+  const router = useRouter();
+  const handleNavigation = (path: string) => router.push(path)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export default function Home() {
   }, [])
 
   return (
+
     <main className="min-h-screen bg-black text-white overflow-hidden">
       {/* Hero Section */}
       <section className="w-full py-20 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8">
@@ -47,20 +50,22 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
-              <Button className="h-14 px-10 text-base font-semibold bg-white text-black hover:bg-neutral-50 shadow-custom-lg hover:shadow-custom-2xl hover:scale-105 active:scale-95 transition-all duration-200 ease-smooth rounded-xl">
+              <Button
+                onClick={()=>handleNavigation("/login")}
+               className=" cursor-pointer h-14 px-10 text-base font-semibold bg-white text-black hover:bg-neutral-50 shadow-custom-lg hover:shadow-custom-2xl hover:scale-105 active:scale-95 transition-all duration-200 ease-smooth rounded-xl">
                 Start for Free
               </Button>
               <Button
                 variant="outline"
-                className="h-14 px-10 text-base font-semibold bg-neutral-900 text-white border-2 border-neutral-700 hover:bg-neutral-800 hover:border-neutral-600 shadow-custom-md hover:shadow-custom-lg hover:scale-105 active:scale-95 transition-all duration-200 ease-smooth rounded-xl"
+                className="cursor-pointer h-14 px-10 text-base font-semibold bg-neutral-900 text-white border-2 border-neutral-700 hover:bg-neutral-600 hover:border-neutral-800 shadow-custom-md hover:shadow-custom-lg hover:scale-105 active:scale-95 transition-all duration-200 ease-smooth rounded-xl"
               >
                 Learn More
               </Button>
             </div>
           </div>
 
-          <div 
-            className="mt-16 md:mt-20 rounded-2xl overflow-hidden aspect-video flex items-center justify-center bg-gradient-to-br from-neutral-900 to-neutral-950 shadow-custom-2xl hover:shadow-glow transition-all duration-500 ease-smooth group animate-scale-in" 
+          <div
+            className="mt-16 md:mt-20 rounded-2xl overflow-hidden aspect-video flex items-center justify-center bg-gradient-to-br from-neutral-900 to-neutral-950 shadow-custom-2xl hover:shadow-glow transition-all duration-500 ease-smooth group animate-scale-in"
             style={{ animationDelay: '0.6s', animationFillMode: 'both' }}
           >
             <div className="text-center group-hover:scale-105 transition-transform duration-300">
