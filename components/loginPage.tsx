@@ -5,25 +5,30 @@ import { signIn } from "next-auth/react"
 import { Loader2, Eye, EyeOff } from "lucide-react" 
 
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/toast-provider"
 
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
+  const { showToast } = useToast()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false) 
-  const[rememberme , setRememberMe]  = useState(false);
+  const [rememberme, setRememberMe] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
+    e.stopPropagation()
 
+    console.log("Login form submitted")
+
+    // Validation
     if (!email.trim() || !password.trim()) {
-      setError("Please enter both email and password.")
+      console.log("Showing validation toast")
+      showToast("Please enter both email and password", "warning", "top-right")
       return
     }
 
@@ -35,32 +40,39 @@ export default function LoginPage() {
         password,
         redirect: false,
         callbackUrl: callbackUrl,
-        rememberMe : rememberme
+        rememberMe: rememberme
       })
 
       setLoading(false)
 
       if (result?.error) {
+        console.log("Login error:", result.error)
+        
         let errorMessage = "Invalid credentials. Please check your email and password."
 
         if (result.error === "No user found with this email") {
-            errorMessage = "No account found with this email."
+          errorMessage = "No account found with this email."
         } else if (result.error === "Invalid password") {
-            errorMessage = "Invalid password. Please try again."
+          errorMessage = "Invalid password. Please try again."
         }
         
-        setError(errorMessage)
+        showToast(errorMessage, "error", "top-right")
         return
       }
       
       if (result?.ok) {
-        router.push(callbackUrl)
-        router.refresh()
+        showToast("Login successful! Redirecting...", "success", "top-right")
+        
+        setTimeout(() => {
+          router.push(callbackUrl)
+          router.refresh()
+        }, 500)
       }
 
     } catch (err) {
+      console.log("Unexpected error:", err)
       setLoading(false)
-      setError("An unexpected error occurred. Please try again.")
+      showToast("An unexpected error occurred. Please try again.", "error", "top-right")
     }
   }
 
@@ -74,7 +86,7 @@ export default function LoginPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 p-8 rounded-3xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/[0.04] shadow-custom-2xl"
+          className="space-y-6 p-8 rounded-3xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/[0.04] shadow-2xl"
         >
           <label className="block text-sm">
             <span className="text-neutral-300">Email</span>
@@ -82,7 +94,6 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               className="mt-2 w-full bg-neutral-900 border border-neutral-800 text-neutral-100 placeholder-neutral-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="you@company.com"
             />
@@ -95,7 +106,6 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
                 className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 placeholder-neutral-500 rounded-md px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                 placeholder="••••••••"
               />
@@ -113,13 +123,16 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm text-neutral-400">
               <input
-              type="checkbox"
-              checked={rememberme}
-              onChange={()=>setRememberMe(!rememberme)} 
-              className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded" />
+                type="checkbox"
+                checked={rememberme}
+                onChange={() => setRememberMe(!rememberme)} 
+                className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded" 
+              />
               Remember me
             </label>
-            <a href="#" className="text-sm text-indigo-400 hover:text-indigo-300">Forgot password?</a>
+            <a href="/forgot-password" className="text-sm text-indigo-400 hover:text-indigo-300">
+              Forgot password?
+            </a>
           </div>
 
           <Button
@@ -127,13 +140,17 @@ export default function LoginPage() {
             className={`w-full h-12 ${loading
                 ? "bg-neutral-300 text-black opacity-80"
                 : "bg-white text-black hover:bg-neutral-50"
-              } shadow-custom-xl rounded-xl transition-all duration-200`}
+              } shadow-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >
             {loading ? (
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            ) : null}
-            {loading ? "Signing in…" : "Sign in"}
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              "Sign in"
+            )}
           </Button>
 
           <p className="text-center text-sm text-neutral-400">
