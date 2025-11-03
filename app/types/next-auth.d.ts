@@ -7,12 +7,14 @@ declare module "next-auth" {
       email: string;
       name: string;
     };
+    rememberMe?:boolean
   }
 
   interface User {
     id: string;
     email: string;
     name: string;
+    rememberMe?:boolean
   }
 }
 

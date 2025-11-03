@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false) 
+  const[rememberme , setRememberMe]  = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,6 +35,7 @@ export default function LoginPage() {
         password,
         redirect: false,
         callbackUrl: callbackUrl,
+        rememberMe : rememberme
       })
 
       setLoading(false)
@@ -110,7 +112,11 @@ export default function LoginPage() {
 
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm text-neutral-400">
-              <input type="checkbox" className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded" />
+              <input
+              type="checkbox"
+              checked={rememberme}
+              onChange={()=>setRememberMe(!rememberme)} 
+              className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded" />
               Remember me
             </label>
             <a href="#" className="text-sm text-indigo-400 hover:text-indigo-300">Forgot password?</a>

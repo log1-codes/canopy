@@ -10,18 +10,18 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
-        name: { label: "Name", type: "text" }
+        name: { label: "Name", type: "text" },
+        rememberMe: { label: "Remember Me", type: "checkbox" },
       },
       async authorize(credentials) {
-        
+        // --- Signup Flow ---
         if (credentials?.name) {
-          
           if (!credentials.email || !credentials.password || !credentials.name.trim()) {
-             throw new Error("Missing signup credentials (Name, Email, or Password).");
+            throw new Error("Missing signup credentials (Name, Email, or Password).");
           }
 
           const existingUser = await prisma.user.findUnique({
-            where: { email: credentials.email }
+            where: { email: credentials.email },
           });
 
           if (existingUser) {
@@ -29,8 +29,6 @@ export const authOptions: NextAuthOptions = {
           }
 
           const hashedPassword = await bcrypt.hash(credentials.password, 12);
-
-          // Create user
           const user = await prisma.user.create({
             data: {
               email: credentials.email,
@@ -40,64 +38,71 @@ export const authOptions: NextAuthOptions = {
           });
 
           return {
-            id: user.id,
+            id: user.id.toString(),
             email: user.email,
             name: user.name,
           };
         }
 
+        // --- Login Flow ---
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required for login");
         }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+          where: { email: credentials.email },
         });
 
         if (!user) {
           throw new Error("No user found with this email, try signing up");
         }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
+        const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
         if (!isPasswordValid) {
           throw new Error("Invalid password");
         }
 
         return {
-          id: user.id,
+          id: user.id.toString(),
           email: user.email,
           name: user.name,
+          rememberMe: credentials.rememberMe === "true",
         };
       },
     }),
   ],
+
   secret: process.env.NEXTAUTH_SECRET,
+
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, 
   },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.rememberMe = user.rememberMe;
       }
       return token;
     },
+
     async session({ session, token }) {
-      if (token && session.user) {
+      if (session.user) {
         session.user.id = token.id as string;
       }
+      session.rememberMe = Boolean(token.rememberMe)
       return session;
     },
+
     async redirect({ url, baseUrl }) {
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      else if (new URL(url).origin === baseUrl) return url
-      return baseUrl
-    }
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
   },
+
   pages: {
     signIn: "/signin",
     error: "/error",
