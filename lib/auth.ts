@@ -13,43 +13,41 @@ export const authOptions: NextAuthOptions = {
         name: { label: "Name", type: "text" }
       },
       async authorize(credentials) {
-        // Signup Logic
+        
         if (credentials?.name) {
-          try {
-            const existingUser = await prisma.user.findUnique({
-              where: { email: credentials.email }
-            });
-
-            if (existingUser) {
-              throw new Error("User already exists with this email");
-            }
-
-            // Hash password
-            const hashedPassword = await bcrypt.hash(credentials.password, 12);
-
-            // Create user
-            const user = await prisma.user.create({
-              data: {
-                email: credentials.email,
-                name: credentials.name,
-                password: hashedPassword,
-              },
-            });
-
-            return {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-            };
-          } catch (error) {
-            console.error("Signup error:", error);
-            throw new Error("Failed to create account");
+          
+          if (!credentials.email || !credentials.password || !credentials.name.trim()) {
+             throw new Error("Missing signup credentials (Name, Email, or Password).");
           }
+
+          const existingUser = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          });
+
+          if (existingUser) {
+            throw new Error("User already exists with this email");
+          }
+
+          const hashedPassword = await bcrypt.hash(credentials.password, 12);
+
+          // Create user
+          const user = await prisma.user.create({
+            data: {
+              email: credentials.email,
+              name: credentials.name,
+              password: hashedPassword,
+            },
+          });
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          };
         }
 
-        // Login Logic
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password required");
+          throw new Error("Email and password required for login");
         }
 
         const user = await prisma.user.findUnique({
@@ -57,7 +55,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user) {
-          throw new Error("No user found with this email");
+          throw new Error("No user found with this email, try signing up");
         }
 
         const isPasswordValid = await bcrypt.compare(

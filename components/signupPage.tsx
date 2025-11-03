@@ -1,10 +1,48 @@
 "use client"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast-provider"
-import { Wallet, Eye, EyeOff, Loader2 } from "lucide-react"
+import { Eye, EyeOff, Loader2, Check, X } from "lucide-react" // Added Check and X icons
 import { signIn } from "next-auth/react"
+
+// --- Password Strength Validator Component ---
+interface PasswordRequirementProps {
+  label: string;
+  isValid: boolean;
+}
+
+const PasswordRequirement = ({ label, isValid }: PasswordRequirementProps) => (
+  <div className="flex items-center text-xs space-x-1.5 transition-colors duration-200">
+    {isValid ? (
+      <Check className="h-4 w-4 text-green-500" />
+    ) : (
+      <X className="h-4 w-4 text-red-500" />
+    )}
+    <span className={isValid ? "text-green-400" : "text-neutral-400"}>
+      {label}
+    </span>
+  </div>
+);
+
+// Function to check password complexity and return the status of each requirement
+const checkPasswordComplexity = (password: string) => {
+  const minLength = 8
+  const hasUppercase = /[A-Z]/.test(password)
+  const hasLowercase = /[a-z]/.test(password)
+  const hasNumber = /[0-9]/.test(password)
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+  return {
+    minLength: password.length >= minLength,
+    hasUppercase,
+    hasLowercase,
+    hasNumber,
+    hasSpecialChar,
+    isValid: password.length >= minLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar,
+  }
+}
+
 export default function SignupPage() {
   const { showToast } = useToast()
   const router = useRouter()
@@ -12,41 +50,42 @@ export default function SignupPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(" ")
+  const [formError, setFormError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+
+  const complexity = useMemo(() => checkPasswordComplexity(password), [password]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
+    setFormError(null); // Clear previous errors
 
-    // 🧠 Input Validation before submit
+    // 🧠 Basic Input Validation
     if (!name.trim()) {
+      setFormError("Please enter your name.")
       showToast("Please enter your name.", "warning", "top-right")
       return
     }
 
-    if (!email.trim()) {
-      showToast("Email is required.", "warning", "top-right")
-      return
-    }
-
-    if (!email.includes("@")) {
-      showToast("Invalid email format.", "error", "top-right")
+    if (!email.trim() || !email.includes("@")) {
+      setFormError("Please enter a valid email address.")
+      showToast("Please enter a valid email address.", "warning", "top-right")
       return
     }
 
     if (!password.trim()) {
+      setFormError("Password cannot be empty.")
       showToast("Password cannot be empty.", "warning", "top-right")
       return
     }
 
-    if (password.length < 6) {
-      showToast("Password must be at least 6 characters.", "warning", "top-right")
+    // 2. Validate password complexity using the check result
+    if (!complexity.isValid) {
+      setFormError("Password does not meet all complexity requirements.")
+      showToast("Password does not meet all complexity requirements.", "warning", "top-right")
       return
     }
 
-
     setLoading(true)
-    setError("");
 
     try {
       const result = await signIn("credentials", {
@@ -55,18 +94,35 @@ export default function SignupPage() {
         name,
         redirect: false,
       })
+      
       if (result?.error) {
-        setError(result.error || "Failed to create account")
-        showToast(`Error : ${result?.error}`, "error", "top-right");
+        // --- NextAuth Error Handling FIX ---
+        let errorMessage = "Failed to create account. Please try again."
+        
+        // This is the FIX: Check for the exact error message thrown by your backend
+        if (result.error === "User already exists with this email") {
+            errorMessage = "A user already exists with this email address. Try logging in instead."
+        } else if (result.error === "Failed to create account") {
+             // This covers generic Prisma or hashing errors
+            errorMessage = "Something went wrong during signup. Please try again."
+        } else {
+            // Catches any other custom error thrown from the NextAuth authorize function
+            errorMessage = result.error
+        }
+
+        setFormError(errorMessage)
+        showToast(`Error : ${errorMessage}`, "error", "top-right");
         setLoading(false)
         return
       }
+
        if (result?.ok) {
-         showToast("Account created successfully!", "success", "top-right")
+         showToast("Account created successfully! Redirecting...", "success", "top-right")
         router.push("/login")
         router.refresh()
       }
     } catch (err) {
+      setFormError("An unexpected error occurred. Please try again.")
       showToast("Something went wrong. Please try again.", "error", "top-right")
     } finally {
       setLoading(false)
@@ -111,13 +167,32 @@ export default function SignupPage() {
 
           <label className="block text-sm">
             <span className="text-neutral-300">Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-2 w-full bg-neutral-900 border border-neutral-800 text-neutral-100 placeholder-neutral-500 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-200"
-              placeholder="••••••••"
-            />
+            <div className="relative mt-2">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 placeholder-neutral-500 rounded-md px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-200"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-400 hover:text-indigo-400 focus:outline-none transition duration-150"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
+            {password.length > 0 && (
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <PasswordRequirement label="8 characters minimum" isValid={complexity.minLength} />
+                <PasswordRequirement label="One uppercase letter" isValid={complexity.hasUppercase} />
+                <PasswordRequirement label="One lowercase letter" isValid={complexity.hasLowercase} />
+                <PasswordRequirement label="One number" isValid={complexity.hasNumber} />
+                <PasswordRequirement label="One special character" isValid={complexity.hasSpecialChar} />
+              </div>
+            )}
           </label>
 
           <div className="flex items-center justify-between">
@@ -128,7 +203,7 @@ export default function SignupPage() {
               />
               Remember me
             </label>
-            <a href="#" className="text-sm text-indigo-400 hover:text-indigo-300">
+            <a href="/forgot-password" className="text-sm text-indigo-400 hover:text-indigo-300">
               Forgot password?
             </a>
           </div>
@@ -141,6 +216,9 @@ export default function SignupPage() {
               } shadow-custom-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >
+            {loading ? (
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : null}
             {loading ? "Signing up…" : "Sign up"}
           </Button>
 
