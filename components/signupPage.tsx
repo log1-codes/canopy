@@ -3,7 +3,7 @@ import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast-provider"
-import { Eye, EyeOff, Loader2, Check, X } from "lucide-react" // Added Check and X icons
+import { Eye, EyeOff, Loader2, Check, X } from "lucide-react"
 import { signIn } from "next-auth/react"
 
 // --- Password Strength Validator Component ---
@@ -23,7 +23,7 @@ const PasswordRequirement = ({ label, isValid }: PasswordRequirementProps) => (
       {label}
     </span>
   </div>
-);
+)
 
 // Function to check password complexity and return the status of each requirement
 const checkPasswordComplexity = (password: string) => {
@@ -57,9 +57,8 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
-    setFormError(null); // Clear previous errors
+    setFormError(null)
 
-    // 🧠 Basic Input Validation
     if (!name.trim()) {
       setFormError("Please enter your name.")
       showToast("Please enter your name.", "warning", "top-right")
@@ -78,7 +77,6 @@ export default function SignupPage() {
       return
     }
 
-    // 2. Validate password complexity using the check result
     if (!complexity.isValid) {
       setFormError("Password does not meet all complexity requirements.")
       showToast("Password does not meet all complexity requirements.", "warning", "top-right")
@@ -96,28 +94,24 @@ export default function SignupPage() {
       })
       
       if (result?.error) {
-        // --- NextAuth Error Handling FIX ---
         let errorMessage = "Failed to create account. Please try again."
         
-        // This is the FIX: Check for the exact error message thrown by your backend
         if (result.error === "User already exists with this email") {
             errorMessage = "A user already exists with this email address. Try logging in instead."
         } else if (result.error === "Failed to create account") {
-             // This covers generic Prisma or hashing errors
             errorMessage = "Something went wrong during signup. Please try again."
         } else {
-            // Catches any other custom error thrown from the NextAuth authorize function
             errorMessage = result.error
         }
 
         setFormError(errorMessage)
-        showToast(`Error : ${errorMessage}`, "error", "top-right");
+        showToast(`Error : ${errorMessage}`, "error", "top-right")
         setLoading(false)
         return
       }
 
-       if (result?.ok) {
-         showToast("Account created successfully! Redirecting...", "success", "top-right")
+      if (result?.ok) {
+        showToast("Account created successfully! Redirecting...", "success", "top-right")
         router.push("/login")
         router.refresh()
       }
@@ -184,6 +178,7 @@ export default function SignupPage() {
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
+
             {password.length > 0 && (
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <PasswordRequirement label="8 characters minimum" isValid={complexity.minLength} />
@@ -195,19 +190,6 @@ export default function SignupPage() {
             )}
           </label>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-neutral-400">
-              <input
-                type="checkbox"
-                className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded"
-              />
-              Remember me
-            </label>
-            <a href="/forgot-password" className="text-sm text-indigo-400 hover:text-indigo-300">
-              Forgot password?
-            </a>
-          </div>
-
           <Button
             type="submit"
             className={`w-full h-12 ${loading
@@ -216,11 +198,16 @@ export default function SignupPage() {
               } shadow-custom-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >
-            {loading ? (
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            ) : null}
+            {loading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
             {loading ? "Signing up…" : "Sign up"}
           </Button>
+
+          {/* ✅ Improved Forgot Password placement */}
+          <div className="text-center mt-3">
+            <a href="/forgot-password" className="text-sm text-indigo-400 hover:text-indigo-300">
+              Forgot password?
+            </a>
+          </div>
 
           <p className="text-center text-sm text-neutral-400">
             Already have an account on Canopy?{" "}
