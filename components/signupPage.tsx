@@ -3,17 +3,19 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast-provider"
-
+import { Wallet, Eye, EyeOff, Loader2 } from "lucide-react"
+import { signIn } from "next-auth/react"
 export default function SignupPage() {
-  const { showToast } = useToast()  // ✅ corrected destructuring
+  const { showToast } = useToast()
   const router = useRouter()
-
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(" ")
+  const [showPassword, setShowPassword] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
 
     // 🧠 Input Validation before submit
@@ -42,12 +44,28 @@ export default function SignupPage() {
       return
     }
 
-    // 🧩 If validation passes:
+
     setLoading(true)
+    setError("");
+
     try {
-      await new Promise((res) => setTimeout(res, 1000)) // mock API
-      showToast("Account created successfully!", "success", "top-right")
-      router.push("/")
+      const result = await signIn("credentials", {
+        email,
+        password,
+        name,
+        redirect: false,
+      })
+      if (result?.error) {
+        setError(result.error || "Failed to create account")
+        showToast(`Error : ${result?.error}`, "error", "top-right");
+        setLoading(false)
+        return
+      }
+       if (result?.ok) {
+         showToast("Account created successfully!", "success", "top-right")
+        router.push("/login")
+        router.refresh()
+      }
     } catch (err) {
       showToast("Something went wrong. Please try again.", "error", "top-right")
     } finally {
@@ -117,11 +135,10 @@ export default function SignupPage() {
 
           <Button
             type="submit"
-            className={`w-full h-12 ${
-              loading
+            className={`w-full h-12 ${loading
                 ? "bg-neutral-300 text-black opacity-80"
                 : "bg-white text-black hover:bg-neutral-50"
-            } shadow-custom-xl rounded-xl transition-all duration-200`}
+              } shadow-custom-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >
             {loading ? "Signing up…" : "Sign up"}
