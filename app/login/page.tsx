@@ -3,7 +3,7 @@ import LoginPage from "@/components/loginPage";
 
 export const metadata: Metadata = {
   title: 'Login | Canopy',
-  description: 'Access your account or create a new one.',
+  description: 'Access your account',
   openGraph: {
     title: 'Login | Canopy',
     description: 'Access your account securely.',
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: 'Canopy',
     images: [
       {
-        url: '/images/login-preview.png',
+        url: '/login-preview.png',
         width: 1200,
         height: 630,
         alt: 'Login page preview',
