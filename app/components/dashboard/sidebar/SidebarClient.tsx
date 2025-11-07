@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Plus,
   Home,
@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useState, useRef, useEffect } from "react";
+import NewWorkspaceModal from "../../NewWorkspaceModal";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,18 +22,12 @@ interface SidebarProps {
   onLogout: () => void;
 }
 
-export default function Sidebar({
-  isOpen,
-  onToggle,
-  user,
-  onLogout,
-}: SidebarProps) {
+export default function Sidebar({ isOpen, onToggle, user, onLogout }: SidebarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   const userName = user.name;
 
@@ -50,7 +44,7 @@ export default function Sidebar({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, []);
 
   return (
     <>
@@ -59,6 +53,7 @@ export default function Sidebar({
           isOpen ? "w-64" : "w-20"
         }`}
       >
+        {/* HEADER */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/[0.04]">
           {isOpen && <h1 className="text-xl font-bold text-white">Canopy</h1>}
           <button
@@ -69,7 +64,7 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* NAVIGATION LINKS */}
+        {/* NAV LINKS */}
         <nav className="flex-1 px-3 py-3 space-y-4">
           <NavLink icon={Home} label="Dashboard" active isOpen={isOpen} />
           <NavLink icon={FileText} label="All Pages" isOpen={isOpen} />
@@ -80,6 +75,7 @@ export default function Sidebar({
         {/* NEW WORKSPACE BUTTON */}
         <div className="p-3 border-t border-white/[0.04]">
           <Button
+            onClick={() => setIsModalOpen(true)}
             className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all h-10 ${
               isOpen ? "justify-start gap-3" : "justify-center"
             }`}
@@ -89,19 +85,17 @@ export default function Sidebar({
           </Button>
         </div>
 
-        {/* USER DROPDOWN */}
+        {/* USER PROFILE DROPDOWN */}
         <div
           ref={dropdownRef}
           className={`p-3 border-t border-white/[0.04] flex relative ${
             isOpen ? "gap-3 items-center" : "flex-col items-center gap-2"
           }`}
         >
-          {/* AVATAR BUTTON */}
+          {/* Avatar Button */}
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className={`rounded-full ${
-              isOpen ? "p-0" : "p-0.5 hover:bg-neutral-800"
-            }`}
+            className={`rounded-full ${isOpen ? "p-0" : "p-0.5 hover:bg-neutral-800"}`}
           >
             <Avatar className={isOpen ? "h-12 w-12" : "h-8 w-8"}>
               <AvatarFallback className="text-white font-medium text-lg bg-gradient-to-br from-indigo-600 to-indigo-800">
@@ -112,30 +106,23 @@ export default function Sidebar({
 
           {isOpen && (
             <div className="flex-1 min-w-0 text-left">
-              <p className="text-sm font-medium text-white truncate">
-                {user.name}
-              </p>
+              <p className="text-sm font-medium text-white truncate">{user.name}</p>
               <p className="text-xs text-neutral-400 truncate">{user.email}</p>
             </div>
           )}
 
-          {/* DROPDOWN MENU */}
+          {/* Dropdown Menu */}
           {dropdownOpen && (
             <div
-              className={`absolute z-30 w-48 rounded-lg border border-neutral-700 bg-neutral-900 py-1 shadow-2xl 
-                ${
-                  isOpen
-                    ? "bottom-full mb-2 left-0"
-                    : "bottom-full mb-2 left-1/2 transform -translate-x-1/2"
-                }`}
+              className={`absolute z-30 w-48 rounded-lg border border-neutral-700 bg-neutral-900 py-1 shadow-2xl ${
+                isOpen
+                  ? "bottom-full mb-2 left-0"
+                  : "bottom-full mb-2 left-1/2 transform -translate-x-1/2"
+              }`}
             >
               <div className="px-3 py-2 border-b border-neutral-700">
-                <p className="text-sm font-semibold text-white truncate">
-                  {userName}
-                </p>
-                <p className="text-xs text-neutral-400 truncate">
-                  {user.email}
-                </p>
+                <p className="text-sm font-semibold text-white truncate">{userName}</p>
+                <p className="text-xs text-neutral-400 truncate">{user.email}</p>
               </div>
 
               <button
@@ -160,6 +147,9 @@ export default function Sidebar({
           )}
         </div>
       </div>
+
+      {/* MODAL */}
+      <NewWorkspaceModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   );
 }

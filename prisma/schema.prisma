@@ -9,11 +9,77 @@ datasource db {
 }
 
 model User {
+  id               String    @id @default(cuid())
+  name             String
+  email            String    @unique
+  createdAt        DateTime  @default(now())
+  password         String
+  resetToken       String?   @unique
+  resetTokenExpiry DateTime?
+
+  ownedWorkspaces   Workspace[]       @relation("OwnedWorkspaces") // Workspaces the user created/owns
+  workspaceAccesses WorkspaceAccess[] // All workspace memberships (M:N)
+}
+
+enum UserRole {
+  OWNER
+  VIEWER
+  EDITOR
+}
+
+model Workspace {
   id        String   @id @default(cuid())
   name      String
-  email     String   @unique
   createdAt DateTime @default(now())
-  password  String 
-  resetToken String? @unique
-  resetTokenExpiry DateTime?
+  updatedAt DateTime @updatedAt
+
+  //relations
+  pages    Page[] // Pages created within this workspace
+  accesses WorkspaceAccess[] //M:N relation via the junction table
+  ownerId  String //This is redundant if we rely on WorkspaceAccess, 
+  // but good for quick lookup/index pages. 
+  // Let's use it for simplicity.
+  owner    User              @relation("OwnedWorkspaces", fields: [ownerId], references: [id])
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  title       String   @default("Untitled")
+  content     Json     @default("{}") // Stores rich content (e.g., Block editor JSON, or Markdown string)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isPublished Boolean  @default(false) // Optional: For public sharing
+  icon        String? // Optional: Store an emoji or URL for page icon
+  coverImage  String? // Optional: URL for a cover image
+
+  // Relations:
+
+  // 1. Parent-Child Relationship (for nesting)
+  // A page can have one parent, and many children
+  parentId String?
+  parent   Page?   @relation("PageChildren", fields: [parentId], references: [id], onDelete: Cascade) // If parent is deleted, children are deleted
+  children Page[]  @relation("PageChildren")
+
+  // 2. Link to Workspace
+  // Each page belongs to exactly one workspace
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade) // If workspace is deleted, all its pages are deleted
+
+  // Optional: Owner/Creator (if you want to track who created a page, beyond workspace access)
+  // createdById     String?
+  // createdBy       User?        @relation("CreatedPages", fields: [createdById], references: [id])
+}
+
+model WorkspaceAccess {
+  id          String   @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        UserRole @default(VIEWER) // Default access is Viewer
+
+  // Relations:
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  // Constraint: A user can only have one role per workspace
+  @@unique([workspaceId, userId])
 }
