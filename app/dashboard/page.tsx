@@ -1,11 +1,15 @@
-import React from 'react'
-import DashBoardPage from '../components/DashBoardPage'
-const page = () => {
-  return (
-    <div>
-      <DashBoardPage/>
-    </div>
-  )
-}
+import { getCurrentUser } from "@/lib/auth-utils";
+import DashboardClient from "../components/dashboard/DashBoardClient";
+const DashboardServer = async () => {
+  const user = await getCurrentUser();
 
-export default page
+  if (!user) {
+    return <div>Please log in to access the dashboard</div>;
+  }
+
+  return (
+      <DashboardClient user={user} initialSidebarState={true} />
+  );
+};
+
+export default DashboardServer;
