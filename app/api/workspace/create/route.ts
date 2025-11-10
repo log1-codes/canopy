@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; 
 import { CreateWorkspaceSchema } from '@/app/lib/validators';
 import { UserRole } from '@prisma/client';
+
 import { getCurrentUser } from '@/lib/auth-utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
