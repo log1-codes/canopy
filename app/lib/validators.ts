@@ -7,4 +7,11 @@ export const CreateWorkspaceSchema = z.object({
         .trim(),
 });
 
-// export type CreateWorkspaceInput = z.infer<typeof CreateWorkspaceSchema>;
+export const CreatePageSchema = z.object({
+    workspaceId: z.string().cuid(),
+    parentId: z.string().cuid().nullable().optional(),
+    title: z.string()
+        .min(1, { message: "page title can't be empty" })
+        .max(255, { message: "Page title is too long." })
+        .trim()
+})
