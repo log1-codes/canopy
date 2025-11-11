@@ -5,6 +5,7 @@ export const CreateWorkspaceSchema = z.object({
         .min(3, { message: "Workspace name must be at least 3 characters." })
         .max(50, { message: "Workspace name must not exceed 50 characters." })
         .trim(),
+        desc: z.string().optional()
 });
 
 export const CreatePageSchema = z.object({

@@ -56,7 +56,7 @@ export async function GET(req: Request) {
         const transformedWorkspaces = workspaces.map(ws => ({
             id:ws.id,
             title: ws.name,
-            description: ws.accesses[0]?.role || "VIEWER",
+            description : ws.description,
             pages: ws._count.pages,
             updated: ws.updatedAt.toISOString(),
         }));

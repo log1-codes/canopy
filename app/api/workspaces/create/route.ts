@@ -31,12 +31,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name } = validatedFields.data;
+    const { name ,desc } = validatedFields.data;
 
     const newWorkspace = await prisma.$transaction(async (tx) => {
       const workspace = await tx.workspace.create({
         data: {
           name: name,
+          description:desc,
           ownerId: userId, 
         },
       });

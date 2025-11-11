@@ -2,15 +2,18 @@ import { MoreHorizontal, Folder, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Workspace } from "./workspace-grid-client";
 import { formatRelativeTime } from "@/app/lib/date-utils";
+import Link from "next/link";
 interface WorkspaceCardProps {
   workspace: Workspace;
 }
 
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   const displayTime = formatRelativeTime(workspace.updated);
+  const href = `/dashboard/workspace/${workspace.id}/pages`
   return (
     
-    <Card
+    <Link href={href}>
+      <Card
       className="
         bg-gradient-to-br from-neutral-800 via-neutral-750 to-neutral-800
         border border-neutral-700/60
@@ -57,6 +60,8 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
         </div>
       </div>
     </Card>
+    
+    </Link>
   );
 }
 
@@ -66,8 +71,10 @@ interface WorkspaceListItemProps {
 
 export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
   const displayTime = formatRelativeTime(workspace.updated);
+ const href = `/dashboard/workspace/${workspace.id}/pages`
   return (
-    <div
+    <Link href={href}>
+      <div
       className="
         bg-gradient-to-br from-neutral-800 via-neutral-750 to-neutral-800
         border border-neutral-700/60
@@ -114,5 +121,6 @@ export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
         <MoreHorizontal className="w-4 h-4 text-neutral-400 group-hover:text-indigo-400 transition-colors" />
       </button>
     </div>
+    </Link>
   );
 }

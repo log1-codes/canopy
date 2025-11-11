@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle , DialogDescription} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation"; 
@@ -13,6 +13,7 @@ interface NewWorkspaceModalProps {
 
 export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceModalProps) {
     const [workspaceName, setWorkspaceName] = useState(""); 
+    const [workspaceDescription ,setWorkspaceDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { showToast } = useToast();
     const router = useRouter(); 
@@ -43,7 +44,7 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: workspaceName.trim() }), 
+                body: JSON.stringify({ name: workspaceName.trim() , desc: workspaceDescription.trim() }), 
             });
 
             if (response.ok) {
@@ -51,14 +52,12 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
                 showToast(`Success! Workspace "${newWorkspace.name} created.`);
                 setWorkspaceName(""); 
                 onOpenChange(false); 
-                router.push(`/workspace/${newWorkspace.id}/pages`); 
+                router.push(`/dashboard/workspace/${newWorkspace.id}/pages`); 
                 router.refresh(); 
 
             } else {
                 const errorData = await response.json();
                 const errorMessage = errorData.message || "Failed to create workspace.";
-                const validationErrors = errorData.errors?.name?.[0]; // Get specific error for 'name' if any
-
                 showToast(errorMessage);
             }
 
@@ -73,19 +72,29 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 sm:max-w-md">
+                <div className="flex flex-col gap-2">
                 <DialogHeader>
                     <DialogTitle className="text-white">Create New Workspace</DialogTitle>
                 </DialogHeader>
-
+                <DialogDescription>
+                        Enter details of workspace here
+                </DialogDescription>
+                </div>
                 <div className="space-y-4 mt-2">
                     <Input
                         placeholder="Workspace name"
                         value={workspaceName}
                         onChange={(e) => setWorkspaceName(e.target.value)}
-                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900" // Adjusted colors
+                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900" 
                         disabled={isLoading} 
                     />
-
+                     <Input
+                        placeholder="Workspace description (optional)"
+                        value={workspaceDescription}
+                        onChange={(e) => setWorkspaceDescription(e.target.value)}
+                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900" 
+                        disabled={isLoading} 
+                    />
                     <Button
                         onClick={handleCreate}
                         className="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white"
