@@ -23,7 +23,6 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
     const handleCreate = async () => {
         const trimmedTitle = pageTitle.trim();
 
-        // 1. Client-side Validation using Zod
         const validationResult = CreatePageSchema.safeParse({
             workspaceId: workspaceId,
             parentId: parentId,
@@ -39,7 +38,6 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
         setIsLoading(true);
 
         try {
-            // 2. Call the API Route
             const response = await fetch('/api/pages', {
                 method: 'POST',
                 headers: {
@@ -52,17 +50,14 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
                 }),
             });
 
-            // 3. Handle API Response
             if (response.ok) {
                 const newPage = await response.json();
-                showToast(`Page Created!",Page "${newPage.title}" has been added.` ,'error','top-right');
+                showToast(`Page Created!",Page "${newPage.title}" has been added.` ,"success",'top-right');
                 
-                // Clear state, close modal, and redirect/refresh
                 setPageTitle("Untitled");
                 onOpenChange(false);
                 
-                // After creating the first page, redirect the user to the editor view for that page.
-                router.push(`/workspace/${workspaceId}/page/${newPage.id}`);
+                router.push(`/dashboard/workspace/${workspaceId}/page/${newPage.id}`);
                 router.refresh(); 
 
             } else {

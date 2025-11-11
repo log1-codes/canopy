@@ -91,6 +91,7 @@ export default async function WorkspaceIndexPage({ params }: WorkspaceIndexPageP
                 ) : (
                     // B. Page List View
                     <PageList
+                        workspaceName={workspace.name}
                         workspaceId={workspaceId}
                         rootPages={rootPages}
                         userRole={role}

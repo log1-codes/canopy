@@ -75,15 +75,14 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
               align="start"
               className="w-44 bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl p-1"
             >
-             {(["edited", "created", "name"] as SortType[]).map((option) => (
+              {(["edited", "created", "name"] as SortType[]).map((option) => (
                 <DropdownMenuItem
                   key={option}
                   onClick={() => setSort(option)}
                   className={`flex items-center justify-between text-sm rounded-md px-3 py-2 cursor-pointer transition-colors
-                    ${
-                      sort === option
-                        ? "bg-indigo-600 text-white"
-                        : "text-neutral-300 hover:bg-neutral-800 hover:text-indigo-400"
+                    ${sort === option
+                      ? "bg-indigo-600 text-white"
+                      : "text-neutral-300 hover:bg-neutral-800 hover:text-indigo-400"
                     }`}
                 >
                   {getSortLabel(option)}
@@ -103,22 +102,20 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
           <Button
             size="sm"
             onClick={() => setView("grid")}
-            className={`px-3 h-8 rounded-md transition-all duration-200 ${
-              view === "grid"
+            className={`px-3 h-8 rounded-md transition-all duration-200 ${view === "grid"
                 ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
                 : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-indigo-400"
-            }`}
+              }`}
           >
             ⊞ Grid
           </Button>
           <Button
             size="sm"
             onClick={() => setView("list")}
-            className={`px-3 h-8 rounded-md transition-all duration-200 ${
-              view === "list"
+            className={`px-3 h-8 rounded-md transition-all duration-200 ${view === "list"
                 ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
                 : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-indigo-400"
-            }`}
+              }`}
           >
             ≡ List
           </Button>
@@ -133,7 +130,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
           ))}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-4">
           {sortedWorkspaces.map((workspace) => (
             <WorkspaceListItem key={workspace.id} workspace={workspace} />
           ))}
