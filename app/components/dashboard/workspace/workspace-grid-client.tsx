@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -31,6 +31,22 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
   const [view, setView] = useState<ViewType>("grid");
   const [sort, setSort] = useState<SortType>("edited");
 
+  useEffect(() => {
+    const savedView = localStorage.getItem("workspace_view") as ViewType | null;
+    const savedSort = localStorage.getItem("workspace_sort") as SortType | null;
+
+    if (savedView) setView(savedView);
+    if (savedSort) setSort(savedSort);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("workspace_view", view);
+  }, [view]);
+
+  useEffect(() => {
+    localStorage.setItem("workspace_sort", sort);
+  }, [sort]);
+
   const sortedWorkspaces = useMemo(() => {
     if (sort === "name") {
       return [...workspaces].sort((a, b) => a.title.localeCompare(b.title));
@@ -51,9 +67,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
 
   return (
     <div>
-      {/* Filter/Sort Bar */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
-        {/* Sort Dropdown */}
         <div className="flex items-center gap-3">
           <span className="text-neutral-400 text-sm">Sort by:</span>
 
@@ -80,9 +94,10 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                   key={option}
                   onClick={() => setSort(option)}
                   className={`flex items-center justify-between text-sm rounded-md px-3 py-2 cursor-pointer transition-colors
-                    ${sort === option
-                      ? "bg-indigo-600 text-white"
-                      : "text-neutral-300 hover:bg-neutral-800 hover:text-indigo-400"
+                    ${
+                      sort === option
+                        ? "bg-indigo-600 text-white"
+                        : "text-neutral-300 hover:bg-neutral-800 hover:text-indigo-400"
                     }`}
                 >
                   {getSortLabel(option)}
@@ -102,27 +117,29 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
           <Button
             size="sm"
             onClick={() => setView("grid")}
-            className={`px-3 h-8 rounded-md transition-all duration-200 ${view === "grid"
+            className={`px-3 h-8 rounded-md transition-all duration-200 ${
+              view === "grid"
                 ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
                 : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-indigo-400"
-              }`}
+            }`}
           >
             ⊞ Grid
           </Button>
           <Button
             size="sm"
             onClick={() => setView("list")}
-            className={`px-3 h-8 rounded-md transition-all duration-200 ${view === "list"
+            className={`px-3 h-8 rounded-md transition-all duration-200 ${
+              view === "list"
                 ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
                 : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-indigo-400"
-              }`}
+            }`}
           >
             ≡ List
           </Button>
         </div>
       </div>
 
-      {/* Workspaces Grid/List */}
+      {/* 🔹 Workspaces Display */}
       {view === "grid" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedWorkspaces.map((workspace) => (
