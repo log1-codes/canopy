@@ -1,18 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react"; 
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/toast-provider";
 import SidebarClient from "./sidebar/SidebarClient";
-import WorkspaceGrid from "./workspace/workspace-grid-server";
 import Topbar from "./topbar/topbar";
+
 interface DashboardClientProps {
   user: { name: string; email: string; avatarInitials: string } | null;
   initialSidebarState: boolean;
+  workspaceContent: ReactNode; 
 }
 
-const DashboardClient = ({ user, initialSidebarState }: DashboardClientProps) => {
+const DashboardClient = ({ user, initialSidebarState, workspaceContent }: DashboardClientProps) => {
   const router = useRouter();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -42,19 +43,13 @@ const DashboardClient = ({ user, initialSidebarState }: DashboardClientProps) =>
   };
 
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50">
-        <div className="flex h-screen overflow-hidden justify-center items-center">
-          <h2 className="text-white text-xl">Please log in to access the dashboard</h2>
-        </div>
-      </div>
-    );
+     return null
   }
 
   return (
       <div className="flex h-screen overflow-hidden">
         <SidebarClient
-        onLogout={()=>handleSignOut()}
+          onLogout={()=>handleSignOut()}
           isOpen={sidebarOpen}
           onToggle={() => setSidebarOpen(!sidebarOpen)}
           user={user}
@@ -67,7 +62,7 @@ const DashboardClient = ({ user, initialSidebarState }: DashboardClientProps) =>
 
           {/* Main Content Area */}
           <main className="flex-1 overflow-auto bg-gradient-to-br from-neutral-900 to-neutral-950">
-            <WorkspaceGrid user={user.name} />
+            {workspaceContent}
           </main>
         </div>
       </div>

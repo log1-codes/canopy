@@ -1,13 +1,15 @@
 import { MoreHorizontal, Folder, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Workspace } from "./workspace-grid-client"; 
-
+import { Workspace } from "./workspace-grid-client";
+import { formatRelativeTime } from "@/app/lib/date-utils";
 interface WorkspaceCardProps {
   workspace: Workspace;
 }
 
 export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
+  const displayTime = formatRelativeTime(workspace.updated);
   return (
+    
     <Card
       className="
         bg-gradient-to-br from-neutral-800 via-neutral-750 to-neutral-800
@@ -43,13 +45,15 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
       <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-indigo-200 transition-colors">
         {workspace.title}
       </h3>
-      <p className="text-sm text-neutral-400 mb-4 line-clamp-2">{workspace.description}</p>
+      <p className="text-neutral-400 text-sm mb-4 line-clamp-2 min-h-[40px]">
+        {workspace.description}
+      </p>
 
       <div className="flex items-center justify-between text-xs text-neutral-500">
         <span>{workspace.pages} Pages</span>
         <div className="flex items-center gap-1">
           <Clock className="w-3 h-3 text-neutral-500" />
-          <span>{workspace.updated}</span>
+          <span>{displayTime}</span>
         </div>
       </div>
     </Card>
@@ -61,6 +65,7 @@ interface WorkspaceListItemProps {
 }
 
 export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
+  const displayTime = formatRelativeTime(workspace.updated);
   return (
     <div
       className="
@@ -89,13 +94,15 @@ export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
           <h3 className="text-base font-semibold text-white group-hover:text-indigo-200 transition-colors">
             {workspace.title}
           </h3>
-          <p className="text-sm text-neutral-400 truncate">{workspace.description}</p>
+          <p className="text-neutral-400 text-sm truncate">
+            {workspace.description}
+          </p>
         </div>
       </div>
 
       <div className="hidden md:flex items-center gap-8 ml-4">
         <span className="text-sm text-neutral-400">{workspace.pages} Pages</span>
-        <span className="text-sm text-neutral-500 whitespace-nowrap">{workspace.updated}</span>
+        <span className="text-sm text-neutral-500 whitespace-nowrap">{displayTime}</span>
       </div>
 
       <button

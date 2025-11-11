@@ -15,3 +15,8 @@ export const CreatePageSchema = z.object({
         .max(255, { message: "Page title is too long." })
         .trim()
 })
+
+export const UpdatePageSchema = z.object({
+    title :z.string().max(255).optional(), 
+    content: z.any().optional()
+})

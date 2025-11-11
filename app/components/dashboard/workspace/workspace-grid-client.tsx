@@ -6,15 +6,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { WorkspaceCard, WorkspaceListItem } from "./workspace-items";
 
 export interface Workspace {
-  id: number;
+  id: string;
   title: string;
   description: string;
   pages: number;
