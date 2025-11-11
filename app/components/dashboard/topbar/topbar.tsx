@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, Menu, LogOut, User } from "lucide-react"; 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {useWorkspaceStore} from '@/app/stores/workspaceStore';
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -13,6 +14,8 @@ interface TopbarProps {
 
 export default function Topbar({ onMenuClick, user, onLogout }: TopbarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const{ query , setQuery} = useWorkspaceStore();
+
   
   const dropdownRef = useRef<HTMLDivElement>(null); 
 
@@ -52,6 +55,8 @@ export default function Topbar({ onMenuClick, user, onLogout }: TopbarProps) {
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-50" />
           <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search workspaces..."
             className="pl-10 bg-neutral-900 border border-neutral-800 text-neutral-50 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 focus:ring-offset-neutral-900 h-10 rounded-md"
           />

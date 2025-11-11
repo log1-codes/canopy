@@ -117,3 +117,5 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
         </Dialog>
     )
 }
+
+
