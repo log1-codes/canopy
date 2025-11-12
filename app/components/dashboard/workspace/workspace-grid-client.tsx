@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ChevronDown } from "lucide-react"
 import { WorkspaceCard, WorkspaceListItem } from "./workspace-items"
 import { NoWorkSpace } from "./NoWorkSpace"
+
 export interface Workspace {
   id: string
   title: string
@@ -86,7 +87,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut" as const ,
+        ease: "easeOut" as any ,
       },
     },
   }
@@ -97,15 +98,14 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
-        ease: "easeOut" as const,
+        duration: 0.5,
+        ease: "easeOut" as any,
       },
     },
   }
 
   return (
     <div>
-      {/* 🔹 Sort & View Controls */}
       <motion.div
         variants={controlsVariants}
         initial="hidden"
@@ -120,19 +120,35 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
             <DropdownMenuTrigger asChild>
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               >
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 text-sm text-white 
-                           rounded-lg px-3 py-2 transition-all duration-300 
-                           hover:bg-neutral-800 hover:border-indigo-600 hover:text-indigo-400"
+                  className="
+                    relative flex items-center gap-2 
+                    bg-gradient-to-br from-neutral-800/80 to-neutral-900/80
+                    backdrop-blur-lg
+                    border border-white/[0.05]
+                    text-sm text-neutral-100
+                    rounded-lg px-3 py-2 
+                    cursor-pointer
+                    transition-all duration-500 ease-out
+                    hover:border-indigo-500/50 
+                    hover:bg-gradient-to-br hover:from-neutral-700/80 hover:to-neutral-800/80
+                    hover:text-indigo-300
+                    hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)]
+                    active:scale-95
+                  "
                 >
                   {getSortLabel(sort)}
-                  <motion.div animate={{ rotate: 0 }} transition={{ duration: 0.3 }}>
-                    <ChevronDown className="w-4 h-4 text-neutral-400" />
+                  <motion.div
+                    animate={{ rotate: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-neutral-400 group-hover:text-indigo-400"
+                  >
+                    <ChevronDown className="w-4 h-4" />
                   </motion.div>
                 </Button>
               </motion.div>
@@ -140,23 +156,36 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
 
             <DropdownMenuContent
               align="start"
-              className="w-44 bg-neutral-900 border border-neutral-800 rounded-lg shadow-xl p-1"
+              className="
+                w-44 
+                bg-neutral-900/80 
+                backdrop-blur-lg
+                border border-white/[0.05]
+                rounded-lg 
+                shadow-[0_8px_32px_rgba(0,0,0,0.3)]
+                p-1
+                animate-in fade-in-0 zoom-in-95 duration-500
+              "
             >
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               >
                 {(["edited", "created", "name"] as SortType[]).map((option) => (
-                  <motion.div key={option} whileHover={{ x: 2 }} transition={{ duration: 0.2 }}>
+                  <motion.div key={option} whileHover={{ x: 4 }} transition={{ duration: 0.5 }}>
                     <DropdownMenuItem
                       onClick={() => setSort(option)}
-                      className={`flex items-center justify-between text-sm rounded-md px-3 py-2 cursor-pointer transition-all duration-300
+                      className={`
+                        flex items-center justify-between text-sm rounded-md px-3 py-2 
+                        cursor-pointer 
+                        transition-all duration-500 ease-out
                         ${
                           sort === option
-                            ? "bg-indigo-600 text-white"
-                            : "text-neutral-300 hover:bg-neutral-800 hover:text-indigo-400"
-                        }`}
+                            ? "bg-indigo-600/60 text-indigo-100 shadow-lg shadow-indigo-500/20"
+                            : "text-neutral-300 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
+                        }
+                      `}
                     >
                       {getSortLabel(option)}
                       <AnimatePresence mode="wait">
@@ -166,8 +195,8 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ duration: 0.2 }}
-                            className="text-xs text-indigo-300 font-medium"
+                            transition={{ duration: 0.5 }}
+                            className="text-xs text-indigo-200 font-medium"
                           >
                             Active
                           </motion.span>
@@ -181,34 +210,52 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
           </DropdownMenu>
         </div>
 
-        {/* View Toggle */}
         <motion.div
-          className="flex gap-2 bg-neutral-900 p-1 rounded-lg border border-neutral-800 transition-colors"
-          whileHover={{ boxShadow: "0 0 0 1px rgba(79, 70, 229, 0.1)" }}
-          transition={{ duration: 0.3 }}
+          className="
+            flex gap-2 
+            bg-neutral-900/50 
+            backdrop-blur-lg
+            p-1 rounded-lg 
+            border border-white/[0.05]
+            transition-all duration-500
+            hover:border-white/[0.1]
+            hover:shadow-[0_8px_32px_rgba(99,102,241,0.1)]
+          "
+          whileHover={{ boxShadow: "0 8px 32px rgba(99, 102, 241, 0.15)" }}
+          transition={{ duration: 0.5 }}
         >
-          <motion.div whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+          <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.5, ease: "easeOut" }}>
             <Button
               size="sm"
               onClick={() => setView("grid")}
-              className={`px-3 h-8 rounded-md transition-all duration-300 ${
-                view === "grid"
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
-                  : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-indigo-400"
-              }`}
+              className={`
+                px-3 h-8 rounded-md 
+                transition-all duration-500 ease-out
+                cursor-pointer
+                ${
+                  view === "grid"
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_16px_rgba(99,102,241,0.3)]"
+                    : "bg-transparent text-neutral-400 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
+                }
+              `}
             >
               ⊞ Grid
             </Button>
           </motion.div>
-          <motion.div whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 30 }}>
+          <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.5, ease: "easeOut" }}>
             <Button
               size="sm"
               onClick={() => setView("list")}
-              className={`px-3 h-8 rounded-md transition-all duration-300 ${
-                view === "list"
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
-                  : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-indigo-400"
-              }`}
+              className={`
+                px-3 h-8 rounded-md 
+                transition-all duration-500 ease-out
+                cursor-pointer
+                ${
+                  view === "list"
+                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_16px_rgba(99,102,241,0.3)]"
+                    : "bg-transparent text-neutral-400 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
+                }
+              `}
             >
               ≡ List
             </Button>
@@ -216,7 +263,6 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
         </motion.div>
       </motion.div>
 
-      {/* 🔹 Workspaces Display */}
       <AnimatePresence mode="wait">
         {filteredWorkspaces.length > 0 ? (
           view === "grid" ? (
@@ -226,7 +272,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
               initial="hidden"
               animate="visible"
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {filteredWorkspaces.map((workspace) => (
@@ -242,7 +288,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
               initial="hidden"
               animate="visible"
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
               className="flex flex-col gap-4"
             >
               {filteredWorkspaces.map((workspace) => (
