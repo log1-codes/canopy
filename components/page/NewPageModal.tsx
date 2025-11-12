@@ -52,7 +52,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
 
             if (response.ok) {
                 const newPage = await response.json();
-                showToast(`Page Created!",Page "${newPage.title}" has been added.` ,"success",'top-right');
+                showToast(`Page Created!,Page "${newPage.title}" has been added.` ,"success",'top-right');
                 
                 setPageTitle("Untitled");
                 onOpenChange(false);
@@ -75,7 +75,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-gray-900 text-white sm:max-w-md">
+            <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50  sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-white">Create New Page</DialogTitle>
                 </DialogHeader>
@@ -85,13 +85,14 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
                         placeholder="e.g. Project Plan, Daily Notes"
                         value={pageTitle}
                         onChange={(e) => setPageTitle(e.target.value)}
-                        className="bg-gray-800 text-white border-gray-700 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                        className="bg-neutral-900 border border-neutral-800 text-neutral-50  border border-white/[0.04] shadow-2xl  focus:ring-indigo-600 focus:ring-offset-gray-900"
                         disabled={isLoading}
                     />
                 </div>
 
                 <DialogFooter>
                     <Button 
+                    className="cursor-pointer"
                         variant="secondary" 
                         onClick={() => onOpenChange(false)} 
                         disabled={isLoading}
@@ -100,7 +101,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
                     </Button>
                     <Button
                         onClick={handleCreate}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                        className="bg-indigo-600 cursor-pointer  hover:bg-indigo-700 text-white"
                         disabled={isLoading}
                     >
                         {isLoading ? (

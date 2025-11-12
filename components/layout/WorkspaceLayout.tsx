@@ -1,31 +1,24 @@
-'use client';
-
-import { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
+import { type ReactNode } from 'react';
 import { UserRole } from '@prisma/client';
 
-import { TopBar } from './TopBar';
-import { Sidebar } from './Sidebar';
+import { getCurrentUser } from '@/lib/auth-utils';
+import { WorkspaceClientLayout } from './WorkspaceClientLayout';
+
 interface WorkspaceLayoutProps {
   workspaceName: string;
   userRole: UserRole;
   children: ReactNode;
 }
 
-export function WorkspaceLayout({ workspaceName, userRole, children }: WorkspaceLayoutProps) {
+export async function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
   return (
-    <div className="flex min-h-screen bg-background text-foreground font-inter">
-      {/* 1. Sidebar (Placeholder) */}
-      <Sidebar workspaceName={workspaceName} userRole={userRole} />
-
-      <div className="flex flex-col flex-grow">
-        {/* 2. TopBar (Placeholder) */}
-        <TopBar workspaceName={workspaceName} userRole={userRole} />
-
-        {/* 3. Main Content */}
-        <main className="flex-grow overflow-y-auto">
-          {children}
-        </main>
-      </div>
-    </div>
+    <WorkspaceClientLayout user={user}>{children}</WorkspaceClientLayout>
   );
 }

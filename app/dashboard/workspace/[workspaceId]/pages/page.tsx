@@ -7,13 +7,13 @@ import { UserRole } from '@prisma/client';
 import { PageList } from '@/components/workspace /PageList';
 import { EmptyState } from '@/components/workspace /EmptyState';
 import { WorkspaceLayout } from "@/components/layout/WorkspaceLayout"
-interface WorkspaceIndexPageProps {
+interface WorkspacePagesPageProps {
     params: Promise<{
         workspaceId: string;
     }>;
 }
 
-export default async function WorkspaceIndexPage({ params }: WorkspaceIndexPageProps) {
+export default async function WorkspacePagesPage({ params }: WorkspacePagesPageProps) {
     const { workspaceId } = await params;
 
     // --- 1. Authentication & User ID Retrieval ---
@@ -61,24 +61,22 @@ export default async function WorkspaceIndexPage({ params }: WorkspaceIndexPageP
     });
 
     if (!accessData || !accessData.workspace) {
-        // Access denied or workspace deleted
         redirect('/dashboard?error=AccessDenied');
     }
 
     const { role, workspace } = accessData;
     const isWritable = (role === UserRole.OWNER || role === UserRole.EDITOR);
-    const rootPages = workspace.pages || []; // Ensure pages array is not null
+    const rootPages = workspace.pages || []; 
 
     const pageCount = await prisma.page.count({
         where: { workspaceId: workspaceId },
     });
 
     return (
-        // WorkspaceLayout provides the shell (Sidebar, TopBar) for the entire workspace view
-        <WorkspaceLayout workspaceName={workspace.name} userRole={role}>
-            <div className="p-8 md:p-10 max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-foreground mb-6">
-                    {workspace.name} <span className="text-muted-foreground text-xl">({pageCount} Total Pages)</span>
+        <WorkspaceLayout  workspaceName={workspace.name} userRole={role}>
+            <div className="p-8  bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50  md:p-10 max-w-7xl mx-auto">
+                <h1 className="text-3xl font-bold  mb-6">
+                    {workspace.name} <span className=" text-xl">({pageCount} Total Pages)</span>
                 </h1>
 
                 {rootPages.length === 0 ? (

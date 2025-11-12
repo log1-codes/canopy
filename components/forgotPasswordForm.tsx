@@ -18,10 +18,10 @@ export default function ForgotPasswordPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    e.stopPropagation(); // Prevent event bubbling
-    
+    e.stopPropagation(); 
+
     console.log("Form submitted, email:", email);
-    
+
     // Email validation
     if (!email.trim()) {
       console.log("Showing toast: empty email");
@@ -53,23 +53,22 @@ export default function ForgotPasswordPage() {
       showToast(
         "Password reset link sent! Please check your email",
         "success",
-        "top-right"
+        "top-right",
       );
       setEmail("");
-      
     } catch (error: any) {
       console.log("Error occurred:", error);
-      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
         showToast(
           "Network error. Please check your connection",
           "error",
-          "top-right"
+          "top-right",
         );
       } else {
         showToast(
           error?.message || "Something went wrong. Please try again",
           "error",
-          "top-right"
+          "top-right",
         );
       }
     } finally {
@@ -109,8 +108,8 @@ export default function ForgotPasswordPage() {
             type="submit"
             className={`w-full h-12 ${
               loading
-                ? "bg-neutral-300 text-black opacity-80"
-                : "bg-white text-black hover:bg-neutral-50"
+                ? "bg-indigo-500/50 text-white/80"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
             } shadow-xl rounded-xl cursor-pointer transition-all duration-200`}
             disabled={loading}
           >

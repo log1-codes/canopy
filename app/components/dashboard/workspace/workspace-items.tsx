@@ -37,7 +37,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
         <button
           className="
-            p-2 hover:bg-neutral-700/60 rounded-lg
+            p-2 hover:bg-neutral-700/60 rounded-full
             opacity-0 group-hover:opacity-100 transition-all
           "
         >
@@ -114,7 +114,7 @@ export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
 
       <button
         className="
-          p-2 hover:bg-neutral-700/60 rounded-lg
+          p-2 hover:bg-neutral-700/60 rounded-full
           opacity-0 group-hover:opacity-100 transition-all
         "
       >

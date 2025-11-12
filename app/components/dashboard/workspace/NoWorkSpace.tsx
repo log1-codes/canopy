@@ -60,11 +60,10 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
     >
       {/* Decorative animated circles */}
       <motion.div className="relative w-40 h-40 mb-8 flex items-center justify-center" variants={itemVariants}>
-        {/* Background pulsing circle */}
         <motion.div
           variants={pulseVariants}
           animate="animate"
-          className="absolute inset-0 rounded-full bg-indigo-600/10 border border-indigo-600/20"
+          className="absolute inset-0 rounded-full bg-indigo-500/20 border border-indigo-500/30"
         />
 
         {/* Floating icon container */}

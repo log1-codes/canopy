@@ -49,7 +49,7 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
 
             if (response.ok) {
                 const newWorkspace = await response.json();
-                showToast(`Success! Workspace "${newWorkspace.name} created.`);
+                showToast(`Success! Workspace "${newWorkspace.name}" has been created.`);
                 setWorkspaceName(""); 
                 onOpenChange(false); 
                 router.push(`/dashboard/workspace/${newWorkspace.id}/pages`); 
@@ -71,7 +71,7 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 sm:max-w-md">
+            <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 sm:max-w-md border-neutral-800">
                 <div className="flex flex-col gap-2">
                 <DialogHeader>
                     <DialogTitle className="text-white">Create New Workspace</DialogTitle>
