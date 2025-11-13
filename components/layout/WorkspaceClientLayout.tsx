@@ -2,21 +2,35 @@
 
 import { useState, type ReactNode } from 'react';
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import SidebarClient from '@/app/components/dashboard/sidebar/SidebarClient';
-import Topbar from '@/app/components/dashboard/topbar/topbar';
+// import Topbar from '@/app/components/dashboard/topbar/topbar';
 import { useToast } from '@/components/ui/toast-provider';
-
+import { usePathname, useRouter } from 'next/navigation';
 interface WorkspaceClientLayoutProps {
   user: { name: string; email: string; avatarInitials: string };
   children: ReactNode;
 }
+
+const getWorkspaceIdFromPath = (pathname: string): string => {
+  // Matches ID segment after /workspace/ and before the next segment (/page or /pages)
+  const match = pathname.match(/\/workspace\/([^/]+)/);
+  return match ? match[1] : '';
+};
+
 
 export function WorkspaceClientLayout({ user, children }: WorkspaceClientLayoutProps) {
   const router = useRouter();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const pathName = usePathname();
+
+  const  workspaceId = getWorkspaceIdFromPath(pathName);
+
+  if (!workspaceId) {
+    return <div className="p-10 text-center text-red-500">Error: Missing Workspace ID in URL.</div>;
+  }
+
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -43,7 +57,13 @@ export function WorkspaceClientLayout({ user, children }: WorkspaceClientLayoutP
 
   return (
     <div className="flex h-screen">
-      <SidebarClient onLogout={handleSignOut} isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} user={user} />
+      <SidebarClient
+        onLogout={handleSignOut}
+        isOpen={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        user={user}
+        workspaceId={workspaceId}
+      />
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* <Topbar onLogout={handleSignOut} user={user} onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} /> */}
         <main className="flex-1 bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 overflow-auto">{children}</main>

@@ -12,6 +12,7 @@ interface NewPageModalProps {
     onOpenChange: (open: boolean) => void;
     workspaceId: string;
     parentId: string | null; 
+    onPageCreated?:()=> void;
 }
 
 export default function NewPageModal({ open, onOpenChange, workspaceId, parentId }: NewPageModalProps) {
@@ -52,7 +53,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
 
             if (response.ok) {
                 const newPage = await response.json();
-                showToast(`Page Created!,Page "${newPage.title}" has been added.` ,"success",'top-right');
+                showToast(`Page Created!Page "${newPage.title}" has been added.` ,"success",'top-right');
                 
                 setPageTitle("Untitled");
                 onOpenChange(false);
