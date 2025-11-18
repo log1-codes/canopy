@@ -28,7 +28,7 @@ interface SidebarProps {
   onToggle: () => void
   user: { name: string; email: string; avatarInitials: string } | null
   onLogout: () => void
-  workspaceId: string
+  workspaceId?: string
 }
 
 const buildPageTree = (pages: PageItem[], parentId: string | null = null): PageTreeNode[] => {
@@ -46,7 +46,7 @@ const PageTree = ({
   workspaceId,
   isOpen,
   depth = 0,
-}: { pages: PageTreeNode[]; workspaceId: string; isOpen: boolean; depth?: number }) => {
+}: { pages: PageTreeNode[]; workspaceId?: string; isOpen: boolean; depth?: number }) => {
   const pathname = usePathname()
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({})
 
@@ -57,7 +57,7 @@ const PageTree = ({
   return (
     <ul className="space-y-0.5">
       {pages.map((page, index) => {
-        const isActive = pathname.includes(`/page/${page.id}`)
+        const isActive = workspaceId ? pathname.includes(`/page/${page.id}`) : false
         const isCurrentlyExpanded = expandedNodes[page.id] !== undefined ? expandedNodes[page.id] : page.isExpanded
         const hasChildren = page.children.length > 0
 
@@ -85,7 +85,7 @@ const PageTree = ({
 
               {/* Page Link with enhanced hover states */}
               <Link
-                href={`/dashboard/workspace/${workspaceId}/page/${page.id}`}
+                href={workspaceId ? `/dashboard/workspace/${workspaceId}/page/${page.id}` : "#"}
                 className={`
                   flex items-center gap-2 py-2 rounded-lg transition-all duration-300 ease-out text-sm w-full
                   ${isOpen ? "pl-2 pr-3" : "justify-center w-8 h-8 p-0"}
@@ -245,7 +245,7 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
 
           {/* Top Level Nav */}
           <nav className="space-y-2 pb-4 border-b border-white/[0.04]">
-            <NavLink icon={Home} label="Dashboard" isOpen={isOpen} />
+            <NavLink icon={Home} href="/dashboard" label="Dashboard" isOpen={isOpen} />
             <NavLink icon={Heart} label="Favorites" isOpen={isOpen} />
             <NavLink icon={Trash2} label="Trash" isOpen={isOpen} />
           </nav>
@@ -403,11 +403,12 @@ interface NavLinkProps {
   label: string
   active?: boolean
   isOpen: boolean
+  href?:string
 }
-
-function NavLink({ icon: Icon, label, active = false, isOpen }: NavLinkProps) {
+function NavLink({ icon: Icon, label, active = false, isOpen, href = "#" }: NavLinkProps) {
   return (
-    <button
+    <Link
+      href={href}
       className={`
         w-full flex items-center py-2.5 rounded-lg
         transition-all duration-300 ease-out
@@ -445,7 +446,9 @@ function NavLink({ icon: Icon, label, active = false, isOpen }: NavLinkProps) {
           ${active ? "text-white" : "text-neutral-400 group-hover:text-indigo-300 group-hover:scale-110"}
         `}
       />
+
       {isOpen && <span className="text-sm font-medium transition-all duration-300 relative z-10">{label}</span>}
-    </button>
+    </Link>
   )
 }
+

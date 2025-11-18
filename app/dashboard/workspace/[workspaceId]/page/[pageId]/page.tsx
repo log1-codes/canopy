@@ -48,7 +48,7 @@ export default async function EditorRoute({ params }: EditorRouteProps) {
   const canEdit = userRole === UserRole.OWNER || userRole === UserRole.EDITOR;
 
   return (
-    <WorkspaceLayout workspaceName={workspaceName} userRole={userRole}>
+    <WorkspaceLayout workspaceId={workspaceId} workspaceName={workspaceName} userRole={userRole}>
       {/* <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-3">
         <div className="flex items-center gap-2 text-sm text-gray-300">
           <Link

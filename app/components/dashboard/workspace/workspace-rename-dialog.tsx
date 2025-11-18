@@ -60,10 +60,11 @@ export function WorkspaceRenameDialog({
         </div>
 
         <DialogFooter className="flex justify-end space-x-2">
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+          <Button className="cursor-pointer"
+           variant="ghost" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>Save</Button>
+          <Button  className=" cursor-pointer bg-indigo-600 text-white hover:bg-indigo-700 shadow-xl rounded-lg transition-all duration-200" onClick={handleSave}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle , DialogDescription} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation"; 
-import { Loader2 } from "lucide-react"; 
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/toast-provider";
 interface NewWorkspaceModalProps {
     open: boolean;
@@ -12,14 +12,14 @@ interface NewWorkspaceModalProps {
 }
 
 export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceModalProps) {
-    const [workspaceName, setWorkspaceName] = useState(""); 
-    const [workspaceDescription ,setWorkspaceDescription] = useState("");
+    const [workspaceName, setWorkspaceName] = useState("");
+    const [workspaceDescription, setWorkspaceDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { showToast } = useToast();
-    const router = useRouter(); 
+    const router = useRouter();
 
     const handleCreate = async () => {
-        
+
         if (!workspaceName.trim()) {
             showToast("Workspace name cannot be empty.");
             return;
@@ -35,25 +35,25 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
             return;
         }
 
-        setIsLoading(true); 
+        setIsLoading(true);
 
         try {
-            
+
             const response = await fetch('/api/workspaces/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: workspaceName.trim() , desc: workspaceDescription.trim() }), 
+                body: JSON.stringify({ name: workspaceName.trim(), desc: workspaceDescription.trim() }),
             });
 
             if (response.ok) {
                 const newWorkspace = await response.json();
-                showToast(`Success! Workspace "${newWorkspace.name}" has been created.`);
-                setWorkspaceName(""); 
-                onOpenChange(false); 
-                router.push(`/dashboard/workspace/${newWorkspace.id}/pages`); 
-                router.refresh(); 
+                showToast(`Success! Workspace "${newWorkspace.name}" has been created.`, "success", "top-right");
+                setWorkspaceName("");
+                onOpenChange(false);
+                router.push(`/dashboard/workspace/${newWorkspace.id}/pages`);
+                router.refresh();
 
             } else {
                 const errorData = await response.json();
@@ -65,7 +65,7 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
             console.error("Client-side error creating workspace:", error);
             showToast("Could not connect to the server. Please try again.");
         } finally {
-            setIsLoading(false); 
+            setIsLoading(false);
         }
     };
 
@@ -73,32 +73,32 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 sm:max-w-md border-neutral-800">
                 <div className="flex flex-col gap-2">
-                <DialogHeader>
-                    <DialogTitle className="text-white">Create New Workspace</DialogTitle>
-                </DialogHeader>
-                <DialogDescription>
+                    <DialogHeader>
+                        <DialogTitle className="text-white">Create New Workspace</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
                         Enter details of workspace here
-                </DialogDescription>
+                    </DialogDescription>
                 </div>
                 <div className="space-y-4 mt-2">
                     <Input
                         placeholder="Workspace name"
                         value={workspaceName}
                         onChange={(e) => setWorkspaceName(e.target.value)}
-                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900" 
-                        disabled={isLoading} 
+                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900"
+                        disabled={isLoading}
                     />
-                     <Input
+                    <Input
                         placeholder="Workspace description (optional)"
                         value={workspaceDescription}
                         onChange={(e) => setWorkspaceDescription(e.target.value)}
-                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900" 
-                        disabled={isLoading} 
+                        className="bg-neutral-800 text-white border-neutral-700 focus:ring-indigo-600 focus:ring-offset-neutral-900"
+                        disabled={isLoading}
                     />
                     <Button
                         onClick={handleCreate}
                         className="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-                        disabled={isLoading} 
+                        disabled={isLoading}
                     >
                         {isLoading ? (
                             <>

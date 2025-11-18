@@ -43,10 +43,10 @@ export async function POST(req: Request) {
     }
 
     const { role } = access;
-    // Check if the user has permission to create pages (OWNER or EDITOR)
-    if (role !== UserRole.OWNER && role !== UserRole.EDITOR) {
+    // Only owners can create new pages to keep shared editors focused on page content.
+    if (role !== UserRole.OWNER) {
       return NextResponse.json(
-        { message: 'You do not have permission to create pages in this workspace.' },
+        { message: 'Only workspace owners can create new pages.' },
         { status: 403 }
       );
     }

@@ -65,7 +65,7 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
     }
 
     const { role, workspace } = accessData;
-    const isWritable = (role === UserRole.OWNER || role === UserRole.EDITOR);
+    const canCreatePages = role === UserRole.OWNER;
     const rootPages = workspace.pages || []; 
 
     const pageCount = await prisma.page.count({
@@ -73,7 +73,11 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
     });
 
     return (
-        <WorkspaceLayout  workspaceName={workspace.name} userRole={role}>
+        <WorkspaceLayout 
+            workspaceId={workspaceId}
+            workspaceName={workspace.name}
+            userRole={role}
+        >
             <div className="p-8  bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50  md:p-10 max-w-7xl mx-auto">
                 <h1 className="text-3xl font-bold  mb-6">
                     {workspace.name} <span className=" text-xl">({pageCount} Total Pages)</span>
@@ -83,7 +87,7 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
                     // A. Empty State
                     <EmptyState
                         workspaceId={workspaceId}
-                        isWritable={isWritable}
+                        canCreatePages={canCreatePages}
                         workspaceName={workspace.name}
                     />
                 ) : (

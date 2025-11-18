@@ -6,15 +6,21 @@ import { Button } from "@/components/ui/button"
 import { PlusCircle, ListTodo } from "lucide-react"
 import NewPageModal from "../page/NewPageModal"
 
+interface RootPage {
+  id: string
+  title: string
+  updatedAt: string | Date
+}
+
 interface PageListProps {
   workspaceId: string
-  rootPages: any[]
+  rootPages: RootPage[]
   userRole: UserRole
   workspaceName: string
 }
 
 export function PageList({ workspaceId, rootPages, userRole, workspaceName }: PageListProps) {
-  const isWritable = userRole === UserRole.OWNER || userRole === UserRole.EDITOR
+  const canCreatePages = userRole === UserRole.OWNER
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
 
@@ -33,7 +39,7 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
           </p>
         </div>
 
-        {isWritable && (
+        {canCreatePages && (
           <Button
             onClick={() => setIsModalOpen(true)}
             className="
@@ -141,14 +147,14 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
               <ListTodo className="h-12 w-12 text-neutral-400 group-hover:text-indigo-400 transition-colors duration-500" />
             </div>
             <h2 className="text-2xl font-semibold mb-2 text-white group-hover:text-indigo-200 transition-colors duration-500">
-              Welcome to "{workspaceName}"
+              Welcome to &ldquo;{workspaceName}&rdquo;
             </h2>
             <p className="text-neutral-400 group-hover:text-neutral-300 mb-8 max-w-md transition-colors duration-500">
-              This workspace doesn't have any pages yet. Start by creating your first page to begin organizing and
+              This workspace doesn&apos;t have any pages yet. Start by creating your first page to begin organizing and
               collaborating.
             </p>
 
-            {isWritable ? (
+            {canCreatePages ? (
               <Button
                 onClick={() => setIsModalOpen(true)}
                 className="
