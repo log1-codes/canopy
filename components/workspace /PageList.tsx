@@ -35,7 +35,7 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
         <div>
           <h2 className="text-3xl font-semibold text-white mb-1">Root Pages</h2>
           <p className="text-sm text-neutral-400">
-            {rootPages.length} {rootPages.length === 1 ? "page" : "pages"} in this workspace
+            {rootPages.length} {rootPages.length === 1 ? "page" : "root pages"} in this workspace
           </p>
         </div>
 

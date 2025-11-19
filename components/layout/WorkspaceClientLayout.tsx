@@ -2,12 +2,13 @@
 
 import { useState, type ReactNode } from 'react';
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { UserRole } from '@prisma/client';
 import SidebarClient from '@/app/components/dashboard/sidebar/SidebarClient';
 import { useToast } from '@/components/ui/toast-provider';
 import { Button } from '@/components/ui/button';
 import SharingModal from '@/components/sharingModal';
+import { ArrowLeft, Compass, Home } from 'lucide-react';
 
 interface WorkspaceClientLayoutProps {
   user: { name: string; email: string; avatarInitials: string };
@@ -17,19 +18,21 @@ interface WorkspaceClientLayoutProps {
   children: ReactNode;
 }
 
-export function WorkspaceClientLayout({ 
-    user, 
-    workspaceId,
-    workspaceName,
-    userRole,
-    children, 
+export function WorkspaceClientLayout({
+  user,
+  workspaceId,
+  workspaceName,
+  userRole,
+  children,
 }: WorkspaceClientLayoutProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
   const isOwner = userRole === UserRole.OWNER;
+  const isOnWorkspacePages = pathname?.includes(`/workspace/${workspaceId}/pages`) ?? false;
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -61,6 +64,18 @@ export function WorkspaceClientLayout({
     setIsSharingModalOpen(true);
   };
 
+  const handleBackNavigate = () => {
+    router.back();
+  };
+
+  const handleGoToPages = () => {
+    router.push(`/dashboard/workspace/${workspaceId}/pages`);
+  };
+
+  const handleGoToDashboard = () => {
+    router.push('/dashboard');
+  };
+
   return (
     <>
       <div className="flex h-screen">
@@ -72,16 +87,48 @@ export function WorkspaceClientLayout({
           workspaceId={workspaceId}
         />
         <div className="flex-1 flex flex-col overflow-hidden">
-          <header className="flex items-center justify-between h-16 border-b border-white/5 bg-neutral-950/80 px-6 backdrop-blur-lg">
-            <div>
-              <p className="text-lg font-semibold text-white truncate max-w-xs">
-                {workspaceName}
-              </p>
-              <p className="text-xs uppercase tracking-wide text-indigo-300">
-                {userRole}
-              </p>
+          <header className="flex flex-wrap md:flex-nowrap md:items-center md:justify-between
+                   px-6 py-4 h-auto border-b border-white/10 bg-neutral-900/90 
+                   backdrop-blur-md">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleBackNavigate}
+                className="cursor-pointer text-neutral-50 hover:text-white"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleGoToPages}
+                disabled={isOnWorkspacePages}
+                className="text-neutral-300 hover:text-white disabled:text-neutral-500"
+              >
+                <Compass className="h-4 w-4" />
+                Workspace Pages
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleGoToDashboard}
+                className="cursor-pointer text-neutral-50 hover:text-white"
+              >
+                <Home className="h-4 w-4" />
+                Dashboard
+              </Button>
             </div>
-            <div className="flex items-center gap-3">
+
+            <div className="flex flex-col select-none  min-w-[220px]">
+              <p className="text-lg font-semibold text-white truncate">{workspaceName}</p>
+              <p className="text-xs uppercase tracking-wide text-indigo-300">{userRole}</p>
+            </div>
+
+            <div className="flex items-center gap-3 mt-2 md:mt-0">
               <Button
                 variant="outline"
                 size="sm"
@@ -90,17 +137,19 @@ export function WorkspaceClientLayout({
               >
                 Share Access
               </Button>
+
               <Button
                 variant="ghost"
                 size="sm"
-                className="cursor-pointer text-neutral-300 hover:text-white"
+                className="cursor-pointer text-neutral-50 hover:text-white"
                 onClick={handleSignOut}
                 disabled={loading}
               >
-                {loading ? 'Signing out...' : 'Logout'}
+                {loading ? 'Signing out…' : 'Logout'}
               </Button>
             </div>
           </header>
+
           <main className="flex-1 bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 overflow-auto">
             {children}
           </main>

@@ -5,8 +5,7 @@ import { authOptions } from '@/lib/auth';
 import { UserRole } from '@prisma/client';
 import { WorkspaceLayout } from '@/components/layout/WorkspaceLayout';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 import { ReadOnlyEditableWrapper } from '@/app/components/editor/ReadOnlyEditableWrapper';
 
 interface EditorRouteProps {
@@ -49,37 +48,37 @@ export default async function EditorRoute({ params }: EditorRouteProps) {
 
   return (
     <WorkspaceLayout workspaceId={workspaceId} workspaceName={workspaceName} userRole={userRole}>
-      {/* <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-3">
-        <div className="flex items-center gap-2 text-sm text-gray-300">
-          <Link
-            href={`/dashboard/workspace/${workspaceId}/pages`}
-            className="flex items-center gap-1 hover:text-white transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Back</span>
-          </Link>
-
-          <span className="text-gray-500">/</span>
-
-          <span className="text-white font-medium truncate max-w-[180px]">
-            {workspaceName}
-          </span>
-
-          <span className="text-gray-500">/</span>
-
-          <span className="text-indigo-400 font-medium truncate max-w-[200px]">
-            {page.title}
-          </span>
-        </div>
-      </div> */}
-
-
-      {/* --- ReadOnly + Edit Toggle Wrapper --- */}
-      <ReadOnlyEditableWrapper
-        page={page}
-        workspaceId={workspaceId}
-        canEdit={canEdit}
-      />
-    </WorkspaceLayout>
+    <div className="px-8 py-6 border-b border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex items-center gap-2 text-sm text-gray-300 flex-wrap">
+        <span className="text-white font-medium truncate max-w-[220px]">
+          {workspaceName}
+        </span>
+        <span className="hidden md:inline text-gray-500">/</span>
+        <span className="text-indigo-400 font-semibold truncate max-w-[260px]">
+          {page.title}
+        </span>
+      </div>
+  
+      <div className="flex gap-2 text-sm flex-wrap">
+        <Link
+          href={`/dashboard/workspace/${workspaceId}/pages`}
+          className="inline-flex items-center gap-2 rounded-lg border border-neutral-700/40 px-3 py-1.5 text-neutral-200 hover:bg-neutral-800 transition"
+        >
+          All Pages
+        </Link>
+  
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-2 rounded-lg border border-neutral-700/40 px-3 py-1.5 text-neutral-200 hover:bg-neutral-800 transition"
+        >
+          Go to Dashboard
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </div>
+  
+    <ReadOnlyEditableWrapper page={page} workspaceId={workspaceId} canEdit={canEdit} />
+  </WorkspaceLayout>
+  
   );
 }

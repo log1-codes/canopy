@@ -253,7 +253,7 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
           {/* WORKSPACE PAGES HIERARCHY */}
           <div className="space-y-2">
             {isOpen && (
-              <p className="text-xs font-semibold text-neutral-500 uppercase px-3 pt-1 transition-opacity duration-500">
+              <p className="text-xs font-semibold text-neutral-50 uppercase px-3 pt-1 transition-opacity duration-500">
                 Workspace Pages
               </p>
             )}

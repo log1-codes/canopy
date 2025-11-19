@@ -25,7 +25,6 @@ export async function WorkspaceLayout({
   }
 
   return (
-    // Passing necessary props down to the Client Component
     <WorkspaceClientLayout 
         user={user}
         workspaceId={workspaceId}
