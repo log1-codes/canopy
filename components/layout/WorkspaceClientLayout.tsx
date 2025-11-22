@@ -4,7 +4,7 @@ import { useState, type ReactNode } from 'react';
 import { signOut } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserRole } from '@prisma/client';
-import SidebarClient from '@/app/components/dashboard/sidebar/SidebarClient';
+import Sidebar from '../dashboard/sidebar/SidebarClient';
 import { useToast } from '@/components/ui/toast-provider';
 import { Button } from '@/components/ui/button';
 import SharingModal from '@/components/sharingModal';
@@ -79,7 +79,7 @@ export function WorkspaceClientLayout({
   return (
     <>
       <div className="flex h-screen">
-        <SidebarClient
+        <Sidebar
           onLogout={handleSignOut}
           isOpen={sidebarOpen}
           onToggle={() => setSidebarOpen(!sidebarOpen)}

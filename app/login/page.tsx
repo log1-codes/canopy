@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
 import LoginPage from "@/components/loginPage";
+import { Suspense } from "react";
+
+export default function LoginPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPage />
+    </Suspense>
+  );
+}
 
 export const metadata: Metadata = {
   title: 'Login | Canopy',
@@ -26,12 +35,4 @@ export const metadata: Metadata = {
   },
 };
 
-const Page = () => {
-  return (
-    <div>
-      <LoginPage />
-    </div>
-  );
-};
 
-export default Page;
