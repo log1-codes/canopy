@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth-utils'; 
+import { getCurrentUser } from '@/lib/auth-utils';
 import { UserRole } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -18,12 +18,12 @@ export default async function WorkspacePage({ params }: WorkspacePageProps) {
   if (!userSession) {
     redirect('/login');
   }
-  
+
   const userId = (await getServerSession(authOptions))?.user?.id;
   if (!userId) {
     redirect('/login');
   }
-  
+
   const access = await prisma.workspaceAccess.findUnique({
     where: {
       workspaceId_userId: {
@@ -50,21 +50,11 @@ export default async function WorkspacePage({ params }: WorkspacePageProps) {
   const rootPages = await prisma.page.findMany({
     where: {
       workspaceId: workspaceId,
-      parentId: null, 
+      parentId: null,
     },
     orderBy: {
       createdAt: 'asc',
     },
-    take: 1, 
+    take: 1,
   });
-
-  // if (rootPages.length > 0) {
-  //   // Found pages: Redirect to the first page's dedicated route
-  //   // The route will be /workspace/[workspaceId]/page/[pageId]
-  //   redirect(`/workspace/${workspaceId}/page/${rootPages[0].id}`);
-  // } else {
-  //   // No pages found: Redirect to a dedicated creation page/route
-  //   // This route will handle the initial page creation UI
-  //   redirect(`/workspace/${workspaceId}/create-first-page`);
-  // }
 }

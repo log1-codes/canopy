@@ -7,7 +7,6 @@ import { UserRole } from '@prisma/client';
 
 export async function POST(req: Request) {
   try {
-    // --- 1. Authentication ---
     const fullSession = await getServerSession(authOptions);
 
     if (!fullSession || !fullSession.user?.id) {
@@ -15,7 +14,6 @@ export async function POST(req: Request) {
     }
     const userId = fullSession.user.id;
 
-    // --- 2. Validation ---
     const body = await req.json();
     const validatedFields = CreatePageSchema.safeParse(body);
 
@@ -27,7 +25,6 @@ export async function POST(req: Request) {
     }
     const { workspaceId, parentId, title } = validatedFields.data;
 
-    // --- 3. Authorization (RBAC Check) ---
     const access = await prisma.workspaceAccess.findUnique({
       where: {
         workspaceId_userId: {
@@ -43,7 +40,6 @@ export async function POST(req: Request) {
     }
 
     const { role } = access;
-    // Only owners can create new pages to keep shared editors focused on page content.
     if (role !== UserRole.OWNER) {
       return NextResponse.json(
         { message: 'Only workspace owners can create new pages.' },
@@ -51,16 +47,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // --- 4. Page Creation ---
     const newPage = await prisma.page.create({
       data: {
         title: title,
         workspaceId: workspaceId,
-        parentId: parentId || null, // Ensure parentId is null if not provided
+        parentId: parentId || null,
       },
     });
 
-    // --- 5. Success Response ---
     return NextResponse.json(newPage, { status: 201 });
 
   } catch (error) {

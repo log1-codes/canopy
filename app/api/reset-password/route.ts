@@ -1,14 +1,30 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { z } from "zod";
+
+const ResetPasswordSchema = z.object({
+  token: z.string().min(1, "Token is required."),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter.")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter.")
+    .regex(/[0-9]/, "Password must contain at least one number.")
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character."),
+});
 
 export async function POST(req: Request) {
   try {
-    const { token, password } = await req.json();
+    const body = await req.json();
+    const parsed = ResetPasswordSchema.safeParse(body);
 
-    if (!token || !password) {
-      return NextResponse.json({ error: "Missing token or password." }, { status: 400 });
+    if (!parsed.success) {
+      const firstError = parsed.error.issues[0]?.message || "Invalid input.";
+      return NextResponse.json({ error: firstError }, { status: 400 });
     }
+
+    const { token, password } = parsed.data;
 
     const user = await prisma.user.findFirst({
       where: { resetToken: token },

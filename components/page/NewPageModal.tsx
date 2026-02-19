@@ -11,14 +11,14 @@ interface NewPageModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     workspaceId: string;
-    parentId: string | null; 
-    onPageCreated?:()=> void;
+    parentId: string | null;
+    onPageCreated?: (pageId: string) => void;
 }
 
-export default function NewPageModal({ open, onOpenChange, workspaceId, parentId }: NewPageModalProps) {
+export default function NewPageModal({ open, onOpenChange, workspaceId, parentId, onPageCreated }: NewPageModalProps) {
     const [pageTitle, setPageTitle] = useState("Untitled");
     const [isLoading, setIsLoading] = useState(false);
-    const {showToast } = useToast();
+    const { showToast } = useToast();
     const router = useRouter();
 
     const handleCreate = async () => {
@@ -32,7 +32,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
 
         if (!validationResult.success) {
             const error = validationResult.error.flatten().fieldErrors.title?.[0] || "Invalid input.";
-            showToast( error, "error", "top-right");
+            showToast(error, "error", "top-right");
             return;
         }
 
@@ -53,22 +53,26 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
 
             if (response.ok) {
                 const newPage = await response.json();
-                showToast(`Page Created!Page "${newPage.title}" has been added.` ,"success",'top-right');
-                
+                showToast(`Page Created! Page "${newPage.title}" has been added.`, "success", 'top-right');
+
                 setPageTitle("Untitled");
                 onOpenChange(false);
-                
-                router.push(`/dashboard/workspace/${workspaceId}/page/${newPage.id}`);
-                router.refresh(); 
+
+                if (onPageCreated) {
+                    onPageCreated(newPage.id);
+                } else {
+                    router.push(`/dashboard/workspace/${workspaceId}/page/${newPage.id}`);
+                    router.refresh();
+                }
 
             } else {
                 const errorData = await response.json();
-                showToast(`Creation Failed" ${errorData.message} || "Could not create page due to an unexpected error.` , 'error' , 'top-right');
+                showToast(`Creation Failed: ${errorData.message || "Could not create page due to an unexpected error."}`, 'error', 'top-right');
             }
 
         } catch (error) {
             console.error("Client-side error creating page:", error);
-            showToast("Check your connection and try again" ,"error", "top-right");
+            showToast("Check your connection and try again", "error", "top-right");
         } finally {
             setIsLoading(false);
         }
@@ -92,10 +96,10 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
                 </div>
 
                 <DialogFooter>
-                    <Button 
-                    className="cursor-pointer"
-                        variant="secondary" 
-                        onClick={() => onOpenChange(false)} 
+                    <Button
+                        className="cursor-pointer"
+                        variant="secondary"
+                        onClick={() => onOpenChange(false)}
                         disabled={isLoading}
                     >
                         Cancel

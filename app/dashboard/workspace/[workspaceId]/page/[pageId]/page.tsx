@@ -7,7 +7,6 @@ import { WorkspaceLayout } from '@/components/layout/WorkspaceLayout';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { ReadOnlyEditableWrapper } from '@/components/editor/ReadOnlyEditableWrapper';
-
 interface EditorRouteProps {
     params: Promise<{
         workspaceId: string;
@@ -18,12 +17,10 @@ interface EditorRouteProps {
 export default async function EditorRoute({ params }: EditorRouteProps) {
     const { workspaceId, pageId } = await params;
 
-    // --- Authentication ---
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) redirect('/login');
     const userId = session.user.id;
 
-    // --- Fetch access + page ---
     const [access, page] = await prisma.$transaction([
         prisma.workspaceAccess.findUnique({
             where: { workspaceId_userId: { workspaceId, userId } },

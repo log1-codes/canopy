@@ -11,10 +11,8 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
         name: { label: "Name", type: "text" },
-        rememberMe: { label: "Remember Me", type: "checkbox" },
       },
       async authorize(credentials) {
-        // --- Signup Flow ---
         if (credentials?.name) {
           if (!credentials.email || !credentials.password || !credentials.name.trim()) {
             throw new Error("Missing signup credentials (Name, Email, or Password).");
@@ -44,7 +42,6 @@ export const authOptions: NextAuthOptions = {
           };
         }
 
-        // --- Login Flow ---
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required for login");
         }
@@ -66,7 +63,6 @@ export const authOptions: NextAuthOptions = {
           id: user.id.toString(),
           email: user.email,
           name: user.name,
-          rememberMe: credentials.rememberMe === "true",
         };
       },
     }),
@@ -76,14 +72,13 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, 
+    maxAge: 30 * 24 * 60 * 60,
   },
 
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.rememberMe = user.rememberMe;
       }
       return token;
     },
@@ -92,7 +87,6 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
       }
-      session.rememberMe = Boolean(token.rememberMe)
       return session;
     },
 

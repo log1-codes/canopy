@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { signOut } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserRole } from '@prisma/client';
 import Sidebar from '../dashboard/sidebar/SidebarClient';
+import { useSignOut } from '@/hooks/useSignOut';
 import { useToast } from '@/components/ui/toast-provider';
 import { Button } from '@/components/ui/button';
 import SharingModal from '@/components/sharingModal';
@@ -28,34 +28,11 @@ export function WorkspaceClientLayout({
   const router = useRouter();
   const pathname = usePathname();
   const { showToast } = useToast();
-  const [loading, setLoading] = useState(false);
+  const handleSignOut = useSignOut();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isSharingModalOpen, setIsSharingModalOpen] = useState(false);
   const isOwner = userRole === UserRole.OWNER;
   const isOnWorkspacePages = pathname?.includes(`/workspace/${workspaceId}/pages`) ?? false;
-
-  const handleSignOut = async () => {
-    setLoading(true);
-    try {
-      showToast('Signing out...', 'info', 'top-right');
-
-      await signOut({
-        redirect: false,
-        callbackUrl: '/login',
-      });
-
-      showToast('Signed out successfully!', 'success', 'top-right');
-
-      setTimeout(() => {
-        router.push('/login');
-        router.refresh();
-      }, 500);
-    } catch (error) {
-      console.error('Sign out error:', error);
-      showToast('Failed to sign out. Please try again.', 'error', 'top-right');
-      setLoading(false);
-    }
-  };
 
   const handleShareClick = () => {
     if (!isOwner) {
@@ -143,9 +120,8 @@ export function WorkspaceClientLayout({
                 size="sm"
                 className="cursor-pointer text-neutral-50 hover:text-white"
                 onClick={handleSignOut}
-                disabled={loading}
               >
-                {loading ? 'Signing out…' : 'Logout'}
+                Logout
               </Button>
             </div>
           </header>

@@ -40,7 +40,7 @@ export default function PageTree({
     const getPageIcon = (icon: string | null) => {
         if (icon === 'hash') return <Hash className="h-4 w-4 text-indigo-300" />;
         if (icon === 'link') return <LinkIcon className="h-4 w-4 text-blue-300" />;
-        return <FileText className="h-4 w-4 text-neutral-400" />; // Default icon
+        return <FileText className="h-4 w-4 text-neutral-400" />;
     };
 
     return (
@@ -55,11 +55,9 @@ export default function PageTree({
                     <li key={page.id} className="overflow-hidden">
                         <div
                             className={`flex items-center w-full group`}
-                            // Apply indentation style
                             style={{ paddingLeft: `${paddingLeft}px` }}
                         >
 
-                            {/* Expansion Button */}
                             {hasChildren && isOpen && (
                                 <button
                                     onClick={(e) => {

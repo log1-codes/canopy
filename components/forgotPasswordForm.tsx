@@ -18,19 +18,18 @@ export default function ForgotPasswordPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    e.stopPropagation(); 
+    e.stopPropagation();
 
-    console.log("Form submitted, email:", email);
 
-    // Email validation
+
     if (!email.trim()) {
-      console.log("Showing toast: empty email");
+
       showToast("Please enter your email address", "warning", "top-right");
       return;
     }
 
     if (!validateEmail(email)) {
-      console.log("Showing toast: invalid email");
+
       showToast("Please enter a valid email address", "warning", "top-right");
       return;
     }
@@ -57,7 +56,7 @@ export default function ForgotPasswordPage() {
       );
       setEmail("");
     } catch (error: any) {
-      console.log("Error occurred:", error);
+
       if (error instanceof TypeError && error.message === "Failed to fetch") {
         showToast(
           "Network error. Please check your connection",
@@ -106,11 +105,10 @@ export default function ForgotPasswordPage() {
 
           <Button
             type="submit"
-            className={`w-full h-12 ${
-              loading
-                ? "bg-indigo-500/50 text-white/80"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            } shadow-xl rounded-xl cursor-pointer transition-all duration-200`}
+            className={`w-full h-12 ${loading
+              ? "bg-indigo-500/50 text-white/80"
+              : "bg-indigo-600 text-white hover:bg-indigo-700"
+              } shadow-xl rounded-xl cursor-pointer transition-all duration-200`}
             disabled={loading}
           >
             {loading ? (

@@ -13,14 +13,12 @@ export async function PUT(req: Request, context: { params: Promise<{ pageId: str
       return NextResponse.json({ message: 'Missing page ID in request URL.' }, { status: 400 });
     }
 
-    // --- Authentication ---
     const fullSession = await getServerSession(authOptions);
     if (!fullSession || !fullSession.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
     const userId = fullSession.user.id;
 
-    // --- Validation ---
     const body = await req.json();
     const validatedFields = UpdatePageSchema.safeParse(body);
     if (!validatedFields.success) {
@@ -31,7 +29,6 @@ export async function PUT(req: Request, context: { params: Promise<{ pageId: str
     }
     const updateData = validatedFields.data;
 
-    // --- Authorization ---
     const page = await prisma.page.findUnique({
       where: { id: pageId },
       select: { workspaceId: true },
@@ -59,7 +56,6 @@ export async function PUT(req: Request, context: { params: Promise<{ pageId: str
       );
     }
 
-    // --- Update Page ---
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json({ message: 'No fields provided for update.' }, { status: 400 });
     }
@@ -70,7 +66,6 @@ export async function PUT(req: Request, context: { params: Promise<{ pageId: str
       select: { updatedAt: true },
     });
 
-    // --- Success ---
     return NextResponse.json({ updatedAt: updatedPage.updatedAt }, { status: 200 });
 
   } catch (error) {

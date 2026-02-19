@@ -3,45 +3,10 @@ import { useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast-provider"
-import { Eye, EyeOff, Loader2, Check, X } from "lucide-react"
+import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { signIn } from "next-auth/react"
+import { checkPasswordComplexity, PasswordRequirementsGrid } from "@/lib/password-utils"
 
-// --- Password Strength Validator Component ---
-interface PasswordRequirementProps {
-  label: string;
-  isValid: boolean;
-}
-
-const PasswordRequirement = ({ label, isValid }: PasswordRequirementProps) => (
-  <div className="flex items-center text-xs space-x-1.5 transition-colors duration-200">
-    {isValid ? (
-      <Check className="h-4 w-4 text-green-500" />
-    ) : (
-      <X className="h-4 w-4 text-red-500" />
-    )}
-    <span className={isValid ? "text-green-400" : "text-neutral-400"}>
-      {label}
-    </span>
-  </div>
-)
-
-// Function to check password complexity and return the status of each requirement
-const checkPasswordComplexity = (password: string) => {
-  const minLength = 8
-  const hasUppercase = /[A-Z]/.test(password)
-  const hasLowercase = /[a-z]/.test(password)
-  const hasNumber = /[0-9]/.test(password)
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
-
-  return {
-    minLength: password.length >= minLength,
-    hasUppercase,
-    hasLowercase,
-    hasNumber,
-    hasSpecialChar,
-    isValid: password.length >= minLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar,
-  }
-}
 
 export default function SignupPage() {
   const { showToast } = useToast()
@@ -92,16 +57,16 @@ export default function SignupPage() {
         name,
         redirect: false,
       })
-      
+
       if (result?.error) {
         let errorMessage = "Failed to create account. Please try again."
-        
+
         if (result.error === "User already exists with this email") {
-            errorMessage = "A user already exists with this email address. Try logging in instead."
+          errorMessage = "A user already exists with this email address. Try logging in instead."
         } else if (result.error === "Failed to create account") {
-            errorMessage = "Something went wrong during signup. Please try again."
+          errorMessage = "Something went wrong during signup. Please try again."
         } else {
-            errorMessage = result.error
+          errorMessage = result.error
         }
 
         setFormError(errorMessage)
@@ -180,21 +145,15 @@ export default function SignupPage() {
             </div>
 
             {password.length > 0 && (
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                <PasswordRequirement label="8 characters minimum" isValid={complexity.minLength} />
-                <PasswordRequirement label="One uppercase letter" isValid={complexity.hasUppercase} />
-                <PasswordRequirement label="One lowercase letter" isValid={complexity.hasLowercase} />
-                <PasswordRequirement label="One number" isValid={complexity.hasNumber} />
-                <PasswordRequirement label="One special character" isValid={complexity.hasSpecialChar} />
-              </div>
+              <PasswordRequirementsGrid complexity={complexity} />
             )}
           </label>
 
           <Button
             type="submit"
             className={`w-full h-12 ${loading
-                ? "bg-indigo-500/50 text-white/80"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
+              ? "bg-indigo-500/50 text-white/80"
+              : "bg-indigo-600 text-white hover:bg-indigo-700"
               } shadow-custom-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >

@@ -63,7 +63,6 @@ export async function GET(req: Request, context: { params: Promise<{ id: string 
 }
 
 export async function POST(req: Request, context: { params: Promise<{ id: string }> }) {
-    //workspace id 
     const { id } = await context.params;
     try {
         const fullSession = await getServerSession(authOptions);
@@ -83,7 +82,6 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
             }
         })
         if (ownerAccess?.role !== UserRole.OWNER) {
-            // Only OWNER can manage permissions
             return NextResponse.json({ message: 'Only the Owner can manage sharing settings.' }, { status: 403 });
         }
         const body = await req.json();
@@ -95,18 +93,15 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
             );
         }
         const { email: targetEmail, role: newRole } = validatedFields.data;
-        //  Find the Target User (User being invited/updated)
         const targetUser = await prisma.user.findUnique({
             where: { email: targetEmail },
             select: { id: true, name: true },
         });
 
         if (!targetUser) {
-            // NOTE: In a real app, you might send an email invitation here.
             return NextResponse.json({ message: `User with email ${targetEmail} not found.` }, { status: 404 });
         }
 
-        // Prevent owner from removing or updating their own access via this form (safety)
         if (targetUser.id === currentUserId) {
             return NextResponse.json({ message: 'Cannot modify your own Owner access.' }, { status: 400 });
         }
@@ -119,17 +114,15 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
                 },
             },
             update: {
-                role: newRole, // Update the existing role
+                role: newRole,
             },
             create: {
                 workspaceId: id,
                 userId: targetUser.id,
-                role: newRole, // Create the new entry (invitation)
+                role: newRole,
             },
             select: { id: true, role: true },
         });
-
-        // 5. Success Response
         return NextResponse.json({
             message: `User ${targetUser.name || 'N/A'} access updated to ${newRole}.`,
             accessId: accessEntry.id

@@ -1,49 +1,11 @@
 "use client";
 import { useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Loader2, Eye, EyeOff, Check, X } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-provider";
+import { checkPasswordComplexity, PasswordRequirementsGrid } from "@/lib/password-utils";
 
-interface PasswordRequirementProps {
-  label: string;
-  isValid: boolean;
-}
-
-const PasswordRequirement = ({ label, isValid }: PasswordRequirementProps) => (
-  <div className="flex items-center text-xs space-x-1.5 transition-colors duration-200">
-    {isValid ? (
-      <Check className="h-4 w-4 text-green-500" />
-    ) : (
-      <X className="h-4 w-4 text-red-500" />
-    )}
-    <span className={isValid ? "text-green-400" : "text-neutral-400"}>
-      {label}
-    </span>
-  </div>
-);
-
-const checkPasswordComplexity = (password: string) => {
-  const minLength = 8;
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasLowercase = /[a-z]/.test(password);
-  const hasNumber = /[0-9]/.test(password);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-  return {
-    minLength: password.length >= minLength,
-    hasUppercase,
-    hasLowercase,
-    hasNumber,
-    hasSpecialChar,
-    isValid:
-      password.length >= minLength &&
-      hasUppercase &&
-      hasLowercase &&
-      hasNumber &&
-      hasSpecialChar,
-  };
-};
 
 export default function ResetPasswordForm() {
   const router = useRouter();
@@ -63,9 +25,8 @@ export default function ResetPasswordForm() {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log("Reset password form submitted");
 
-    // Validation
+
     if (!token) {
       showToast("Invalid or missing token", "error", "top-right");
       return;
@@ -97,14 +58,14 @@ export default function ResetPasswordForm() {
       }
 
       showToast("Password successfully reset! Redirecting to login...", "success", "top-right");
-      
+
       setTimeout(() => {
         router.push("/login");
       }, 2000);
-      
+
     } catch (error: any) {
-      console.log("Reset error:", error);
-      
+
+
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         showToast("Network error. Please check your connection", "error", "top-right");
       } else {
@@ -155,13 +116,7 @@ export default function ResetPasswordForm() {
 
             {/* Password strength indicators */}
             {password.length > 0 && (
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                <PasswordRequirement label="8 characters minimum" isValid={complexity.minLength} />
-                <PasswordRequirement label="One uppercase letter" isValid={complexity.hasUppercase} />
-                <PasswordRequirement label="One lowercase letter" isValid={complexity.hasLowercase} />
-                <PasswordRequirement label="One number" isValid={complexity.hasNumber} />
-                <PasswordRequirement label="One special character" isValid={complexity.hasSpecialChar} />
-              </div>
+              <PasswordRequirementsGrid complexity={complexity} />
             )}
           </div>
 
@@ -189,11 +144,10 @@ export default function ResetPasswordForm() {
           {/* Submit Button */}
           <Button
             type="submit"
-            className={`w-full h-12 ${
-              loading
-                ? "bg-indigo-500/50 text-white/80"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
-            } shadow-xl rounded-xl transition-all duration-200`}
+            className={`w-full h-12 ${loading
+              ? "bg-indigo-500/50 text-white/80"
+              : "bg-indigo-600 text-white hover:bg-indigo-700"
+              } shadow-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >
             {loading ? (

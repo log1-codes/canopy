@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/toast-provider";
+import { useSignOut } from "@/hooks/useSignOut";
 import SidebarClient from "./sidebar/SidebarClient";
 import Topbar from "./topbar/topbar";
 
@@ -14,33 +12,8 @@ interface DashboardClientProps {
 }
 
 const DashboardClient = ({ user, initialSidebarState, workspaceContent }: DashboardClientProps) => {
-  const router = useRouter();
-  const { showToast } = useToast();
-  const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(initialSidebarState);
-
-  const handleSignOut = async () => {
-    setLoading(true);
-    try {
-      showToast("Signing out...", "info", "top-right");
-
-      await signOut({
-        redirect: false,
-        callbackUrl: "/login",
-      });
-
-      showToast("Signed out successfully!", "success", "top-right");
-
-      setTimeout(() => {
-        router.push("/login");
-        router.refresh();
-      }, 500);
-    } catch (error) {
-      console.error("Sign out error:", error);
-      showToast("Failed to sign out. Please try again.", "error", "top-right");
-      setLoading(false);
-    }
-  };
+  const handleSignOut = useSignOut();
 
   if (!user) {
     return null

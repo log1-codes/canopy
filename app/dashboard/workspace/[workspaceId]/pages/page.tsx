@@ -26,7 +26,6 @@ export const metadata: Metadata = {
 export default async function WorkspacePagesPage({ params }: WorkspacePagesPageProps) {
     const { workspaceId } = await params;
 
-    // --- 1. Authentication & User ID Retrieval ---
     const fullSession = await getServerSession(authOptions);
 
     if (!fullSession || !fullSession.user?.id) {
@@ -35,7 +34,6 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
 
     const userId = fullSession.user.id;
 
-    // --- 2. Authorization Check & Data Fetching ---
     const accessData = await prisma.workspaceAccess.findUnique({
         where: {
             workspaceId_userId: {
@@ -43,7 +41,6 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
                 userId: userId,
             },
         },
-        // Fetch essential workspace info and all root-level pages
         select: {
             role: true,
             workspace: {
@@ -52,7 +49,7 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
                     name: true,
                     pages: {
                         where: {
-                            parentId: null, // Only fetch top-level/root pages for the index
+                            parentId: null,
                         },
                         orderBy: {
                             createdAt: 'asc',
@@ -120,14 +117,12 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
                 </h1>
 
                 {rootPages.length === 0 ? (
-                    // A. Empty State
                     <EmptyState
                         workspaceId={workspaceId}
                         canCreatePages={canCreatePages}
                         workspaceName={workspace.name}
                     />
                 ) : (
-                    // B. Page List View
                     <PageList
                         workspaceName={workspace.name}
                         workspaceId={workspaceId}

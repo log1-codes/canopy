@@ -1,31 +1,51 @@
 import WorkspaceClient, { Workspace } from "./workspace-grid-client";
-import { headers } from "next/headers"; 
+import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 interface WorkspaceGridProps {
   user: string;
 }
 
 export default async function WorkspaceGridServer({ user }: WorkspaceGridProps) {
-  
-  const headersList =await  headers();
-  const cookie = headersList.get('cookie') || '';
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/workspaces/all-workspaces`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Cookie": cookie, 
-    },
-    cache: "no-store",
-  });
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
 
   let workspaces: Workspace[] = [];
 
-  if (res.ok) {
-    const data = await res.json();
-    workspaces = data.workspaces || [];
-  } else {
-    console.error("Failed to fetch workspaces:", res.statusText);
+  if (userId) {
+    try {
+      const rawWorkspaces = await prisma.workspace.findMany({
+        where: {
+          OR: [
+            { ownerId: userId },
+            {
+              accesses: {
+                some: { userId: userId },
+              },
+            },
+          ],
+        },
+        include: {
+          _count: {
+            select: { pages: true },
+          },
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+      });
+
+      workspaces = rawWorkspaces.map((ws) => ({
+        id: ws.id,
+        title: ws.name,
+        description: ws.description ?? "",
+        pages: ws._count.pages,
+        updated: ws.updatedAt.toISOString(),
+      }));
+    } catch (error) {
+      console.error("Failed to fetch workspaces:", error);
+    }
   }
 
   return (

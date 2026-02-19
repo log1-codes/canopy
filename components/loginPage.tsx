@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
-import { Loader2, Eye, EyeOff } from "lucide-react" 
+import { Loader2, Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast-provider"
 
@@ -15,18 +15,17 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false) 
+  const [showPassword, setShowPassword] = useState(false)
   const [rememberme, setRememberMe] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     e.stopPropagation()
 
-    console.log("Login form submitted")
 
-    // Validation
+
     if (!email.trim() || !password.trim()) {
-      console.log("Showing validation toast")
+
       showToast("Please enter both email and password", "warning", "top-right")
       return
     }
@@ -39,14 +38,13 @@ export default function LoginPage() {
         password,
         redirect: false,
         callbackUrl: callbackUrl,
-        rememberMe: rememberme
       })
 
       setLoading(false)
 
       if (result?.error) {
-        console.log("Login error:", result.error)
-        
+
+
         let errorMessage = "Invalid credentials. Please check your email and password."
 
         if (result.error === "No user found with this email") {
@@ -54,14 +52,14 @@ export default function LoginPage() {
         } else if (result.error === "Invalid password") {
           errorMessage = "Invalid password. Please try again."
         }
-        
+
         showToast(errorMessage, "error", "top-right")
         return
       }
-      
+
       if (result?.ok) {
         showToast("Login successful! Redirecting...", "success", "top-right")
-        
+
         setTimeout(() => {
           router.push(callbackUrl)
           router.refresh()
@@ -69,7 +67,7 @@ export default function LoginPage() {
       }
 
     } catch (err) {
-      console.log("Unexpected error:", err)
+
       setLoading(false)
       showToast("An unexpected error occurred. Please try again.", "error", "top-right")
     }
@@ -124,8 +122,8 @@ export default function LoginPage() {
               <input
                 type="checkbox"
                 checked={rememberme}
-                onChange={() => setRememberMe(!rememberme)} 
-                className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded" 
+                onChange={() => setRememberMe(!rememberme)}
+                className="h-4 w-4 bg-neutral-800 border-neutral-700 rounded"
               />
               Remember me
             </label>
@@ -137,8 +135,8 @@ export default function LoginPage() {
           <Button
             type="submit"
             className={`w-full h-12 ${loading
-                ? "bg-indigo-500/50 text-white/80"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
+              ? "bg-indigo-500/50 text-white/80"
+              : "bg-indigo-600 text-white hover:bg-indigo-700"
               } shadow-xl rounded-xl transition-all duration-200`}
             disabled={loading}
           >

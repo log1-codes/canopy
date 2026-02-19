@@ -1,39 +1,28 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth-utils";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { getAuthenticatedUser } from "@/lib/auth-utils";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: Request) {
     try {
-        const userSession = await getCurrentUser();
+        const user = await getAuthenticatedUser();
 
-        if (!userSession) {
+        if (!user) {
             return NextResponse.json(
                 { message: "Unauthorized" },
                 { status: 401 }
             );
         }
 
-        const session = await getServerSession(authOptions);
-        const userId = session?.user?.id;
+        const userId = user.id;
 
-        if (!userId) {
-            return NextResponse.json(
-                { message: "User ID not found in the session. Authentication configuration error." },
-                { status: 500 }
-            );
-        }
-
-        // Fetch all workspaces where the user has access (owner or member)
         const workspaces = await prisma.workspace.findMany({
             where: {
                 OR: [
-                    { ownerId: userId }, 
+                    { ownerId: userId },
                     {
                         accesses: {
                             some: {
-                                userId: userId 
+                                userId: userId
                             }
                         }
                     }
@@ -41,7 +30,7 @@ export async function GET(req: Request) {
             },
             include: {
                 _count: {
-                    select: { pages: true } 
+                    select: { pages: true }
                 },
                 accesses: {
                     where: { userId: userId },
@@ -54,9 +43,9 @@ export async function GET(req: Request) {
         });
 
         const transformedWorkspaces = workspaces.map(ws => ({
-            id:ws.id,
+            id: ws.id,
             title: ws.name,
-            description : ws.description,
+            description: ws.description,
             pages: ws._count.pages,
             updated: ws.updatedAt.toISOString(),
         }));
@@ -70,7 +59,7 @@ export async function GET(req: Request) {
         console.error("Error fetching workspaces:", error);
 
         return NextResponse.json(
-            { message: "Internal Server Error", error: String(error) },
+            { message: "Internal Server Error" },
             { status: 500 }
         );
     }

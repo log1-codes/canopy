@@ -19,8 +19,7 @@ import "../editor/tiptap-editor-styles.css"
 import NewPageModal from "@/components/page/NewPageModal"
 import { useRouter } from "next/navigation"
 
-const cn = (...classes: (string | boolean | undefined | null)[]) =>
-  classes.filter(Boolean).join(" ").replace(/\s+/g, " ").trim()
+import { cn } from "@/lib/utils"
 
 interface PageData {
   id: string
@@ -31,7 +30,7 @@ interface PageData {
 
 interface EditorComponentProps {
   initialData: PageData
-  isEditable: boolean // permission-based (editor/owner)
+  isEditable: boolean
   workspaceId: string
 }
 
@@ -275,7 +274,7 @@ export function EditorComponent({
           >
             {isEditable ? (
               <>
-                 You're viewing this page in <strong>read-only mode</strong>. Click{" "}
+                You're viewing this page in <strong>read-only mode</strong>. Click{" "}
                 <strong>"Edit Mode"</strong> above to make changes.
               </>
             ) : (
@@ -305,7 +304,7 @@ export function EditorComponent({
         onOpenChange={() => setModalOpen(false)}
         parentId={initialData.id}
         workspaceId={workspaceId}
-        onPageCreated={() => handleSubpageCreated}
+        onPageCreated={handleSubpageCreated}
       />
     </div>
   )

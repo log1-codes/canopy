@@ -10,12 +10,10 @@ import { HardBreak } from "@tiptap/extension-hard-break"
 import { useEffect } from "react"
 import { Bold, Italic, Strikethrough, Code, Quote, ListChecks, ListOrdered, List } from "lucide-react"
 
-const cn = (...classes: (string | boolean | undefined | null)[]) => {
-  return classes.filter(Boolean).join(" ").replace(/\s+/g, " ").trim()
-}
+import { cn } from "@/lib/utils"
 
 interface TiptapEditorProps {
-  initialContent: any 
+  initialContent: any
   onUpdate: (jsonContent: any) => void
   isEditable: boolean
 }

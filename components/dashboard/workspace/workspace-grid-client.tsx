@@ -49,6 +49,10 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
     const sorted = [...workspaces]
     if (sort === "name") {
       sorted.sort((a, b) => a.title.localeCompare(b.title))
+    } else if (sort === "edited") {
+      sorted.sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime())
+    } else if (sort === "created") {
+      sorted.sort((a, b) => new Date(a.updated).getTime() - new Date(b.updated).getTime())
     }
     return sorted
   }, [workspaces, sort])
@@ -87,7 +91,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut" as any ,
+        ease: "easeOut" as any,
       },
     },
   }
@@ -180,10 +184,9 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                         flex items-center justify-between text-sm rounded-md px-3 py-2 
                         cursor-pointer 
                         transition-all duration-500 ease-out
-                        ${
-                          sort === option
-                            ? "bg-indigo-600/60 text-indigo-100 shadow-lg shadow-indigo-500/20"
-                            : "text-neutral-300 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
+                        ${sort === option
+                          ? "bg-indigo-600/60 text-indigo-100 shadow-lg shadow-indigo-500/20"
+                          : "text-neutral-300 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
                         }
                       `}
                     >
@@ -232,10 +235,9 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                 px-3 h-8 rounded-md 
                 transition-all duration-500 ease-out
                 cursor-pointer
-                ${
-                  view === "grid"
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_16px_rgba(99,102,241,0.3)]"
-                    : "bg-transparent text-neutral-400 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
+                ${view === "grid"
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_16px_rgba(99,102,241,0.3)]"
+                  : "bg-transparent text-neutral-400 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
                 }
               `}
             >
@@ -250,10 +252,9 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                 px-3 h-8 rounded-md 
                 transition-all duration-500 ease-out
                 cursor-pointer
-                ${
-                  view === "list"
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_16px_rgba(99,102,241,0.3)]"
-                    : "bg-transparent text-neutral-400 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
+                ${view === "list"
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_8px_16px_rgba(99,102,241,0.3)]"
+                  : "bg-transparent text-neutral-400 hover:bg-neutral-800/60 hover:text-indigo-300 hover:shadow-md hover:shadow-indigo-500/10"
                 }
               `}
             >
