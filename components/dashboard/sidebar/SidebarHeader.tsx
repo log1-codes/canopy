@@ -10,7 +10,7 @@ export default function SidebarHeader({ isOpen, onToggle }: SidebarHeaderProps) 
         <div
             className="
         flex items-center justify-between h-16 px-4
-        border-b border-white/[0.04]
+        border-b border-white/4
         transition-all duration-700 ease-out
       "
         >
@@ -25,7 +25,7 @@ export default function SidebarHeader({ isOpen, onToggle }: SidebarHeaderProps) 
           p-1.5 rounded-lg
           bg-neutral-800/30 hover:bg-neutral-700/50
           backdrop-blur-md
-          border border-white/[0.05] hover:border-indigo-500/30
+          border border-white/5 hover:border-indigo-500/30
           transition-all duration-500 ease-out
           hover:shadow-lg hover:shadow-indigo-500/10
           cursor-pointer

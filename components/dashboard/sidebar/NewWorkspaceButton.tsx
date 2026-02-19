@@ -8,11 +8,11 @@ interface NewWorkspaceButtonProps {
 
 export default function NewWorkspaceButton({ isOpen, onClick }: NewWorkspaceButtonProps) {
     return (
-        <div className="p-3 border-t border-white/[0.04] transition-all duration-500">
+        <div className="p-3 border-t border-white/4 transition-all duration-500">
             <Button
                 onClick={onClick}
                 className={`
-          w-full bg-gradient-to-r from-indigo-600 to-indigo-600
+          w-full bg-linear-to-r from-indigo-600 to-indigo-600
           hover:from-indigo-500 hover:to-indigo-600
           text-white font-semibold rounded-xl
           transition-all duration-500 ease-out

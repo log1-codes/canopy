@@ -86,7 +86,7 @@ export default async function WorkspacePagesPage({ params }: WorkspacePagesPageP
             workspaceName={workspace.name}
             userRole={role}
         >
-            <div className="p-8  bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50  md:p-10 max-w-7xl mx-auto">
+            <div className="p-8  bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50  md:p-10 max-w-7xl mx-auto">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
                     <Link
                         href="/dashboard"

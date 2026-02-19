@@ -64,7 +64,7 @@ export default function Home() {
           </div>
 
           <div
-            className="mt-16 md:mt-20 rounded-2xl overflow-hidden aspect-video flex items-center justify-center bg-gradient-to-br from-neutral-900 to-neutral-950 shadow-custom-2xl hover:shadow-glow transition-all duration-500 ease-smooth group animate-scale-in"
+            className="mt-16 md:mt-20 rounded-2xl overflow-hidden aspect-video flex items-center justify-center bg-linear-to-br from-neutral-900 to-neutral-950 shadow-custom-2xl hover:shadow-glow transition-all duration-500 ease-smooth group animate-scale-in"
             style={{ animationDelay: '0.6s', animationFillMode: 'both' }}
           >
             <div className="text-center group-hover:scale-105 transition-transform duration-300">
@@ -102,7 +102,7 @@ export default function Home() {
               return (
                 <div
                   key={index}
-                  className="rounded-2xl p-8 md:p-10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-sm shadow-custom-lg hover:shadow-custom-2xl hover:-translate-y-2 active:translate-y-0 transition-all duration-300 ease-smooth group animate-fade-in-up cursor-pointer border border-white/[0.06] hover:border-white/[0.12]"
+                  className="rounded-2xl p-8 md:p-10 bg-linear-to-br from-white/8 to-white/3 backdrop-blur-sm shadow-custom-lg hover:shadow-custom-2xl hover:-translate-y-2 active:translate-y-0 transition-all duration-300 ease-smooth group animate-fade-in-up cursor-pointer border border-white/6 hover:border-white/12"
                   style={{ animationDelay: `${index * 0.1}s`, animationFillMode: 'both' }}
                 >
                   <div className="mb-5 transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 ease-bounce">
@@ -119,7 +119,7 @@ export default function Home() {
 
       <section className="w-full py-20 md:py-32 px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center space-y-8 md:space-y-10 p-12 md:p-16 rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-sm shadow-custom-2xl border border-white/[0.06] animate-fade-in">
+          <div className="text-center space-y-8 md:space-y-10 p-12 md:p-16 rounded-3xl bg-linear-to-br from-white/8 to-white/3 backdrop-blur-sm shadow-custom-2xl border border-white/6 animate-fade-in">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight">
               Ready to transform your team's workflow?
             </h2>

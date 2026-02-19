@@ -819,7 +819,7 @@ export function TiptapEditor({
 
         <MenuBar editor={editor} title={title} showFind={showFind} setShowFind={setShowFind} />
 
-        <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-950">
+        <div className="grow overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-950">
           <EditorContent editor={editor} />
         </div>
 

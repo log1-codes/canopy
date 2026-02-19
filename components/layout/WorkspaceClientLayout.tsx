@@ -66,7 +66,7 @@ export function WorkspaceClientLayout({
                 variant="ghost"
                 size="icon"
                 onClick={handleBackNavigate}
-                className="cursor-pointer text-neutral-400 hover:text-white h-8 w-8 flex-shrink-0"
+                className="cursor-pointer text-neutral-400 hover:text-white h-8 w-8 shrink-0"
                 title="Go Back"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -116,7 +116,7 @@ export function WorkspaceClientLayout({
             </div>
           </header>
 
-          <main className="flex-1 bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 overflow-auto">
+          <main className="flex-1 bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50 overflow-auto">
             {children}
           </main>
         </div>

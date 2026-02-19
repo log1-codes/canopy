@@ -27,7 +27,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
         <Card
           className="
             relative overflow-hidden
-            bg-gradient-to-br from-neutral-800 via-neutral-850 to-neutral-900
+            bg-linear-to-br from-neutral-800 via-neutral-850 to-neutral-900
             border border-neutral-700/50
             hover:border-indigo-500/50
             hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)]
@@ -37,14 +37,14 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
           "
         >
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 to-transparent"></div>
           </div>
 
           <div className="relative flex items-start justify-between mb-4">
             <div
               className="
                 p-2.5
-                bg-gradient-to-br from-neutral-700 to-neutral-750
+                bg-linear-to-br from-neutral-700 to-neutral-750
                 group-hover:from-indigo-600/40 group-hover:to-indigo-500/20
                 rounded-lg transition-all duration-300 ease-out
                 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-indigo-500/20
@@ -131,7 +131,7 @@ export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
       <div
         className="
           relative overflow-hidden
-          bg-gradient-to-br from-neutral-800 via-neutral-850 to-neutral-900
+          bg-linear-to-br from-neutral-800 via-neutral-850 to-neutral-900
           border border-neutral-700/50
           hover:border-indigo-500/50
           rounded-lg
@@ -146,18 +146,18 @@ export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
         onClick={() => router.push(href)}
       >
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-transparent"></div>
         </div>
 
         <div className="relative flex items-center gap-4 flex-1 min-w-0">
           <div
             className="
               p-2
-              bg-gradient-to-br from-neutral-700 to-neutral-750
+              bg-linear-to-br from-neutral-700 to-neutral-750
               group-hover:from-indigo-600/40 group-hover:to-indigo-500/20
               rounded-lg transition-all duration-300 ease-out
               group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-indigo-500/20
-              flex-shrink-0
+              shrink-0
             "
           >
             <Folder className="h-5 w-5 text-indigo-400 group-hover:text-indigo-300 transition-colors duration-300" />
@@ -177,7 +177,7 @@ export function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
           </div>
         </div>
 
-        <div className="relative flex-shrink-0 ml-4" onClick={(e) => e.stopPropagation()}>
+        <div className="relative shrink-0 ml-4" onClick={(e) => e.stopPropagation()}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="text-neutral-500 hover:text-white p-1 transition-colors duration-200 rounded-md hover:bg-neutral-700/50">

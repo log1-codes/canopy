@@ -80,8 +80,8 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
         className={`
           fixed top-0 left-0 z-50 h-screen
           flex flex-col
-          bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-950
-          border-r border-white/[0.04]
+          bg-linear-to-br from-neutral-900 via-neutral-900 to-neutral-950
+          border-r border-white/4
           transition-transform duration-500 ease-out
           md:static md:translate-x-0 md:flex
           ${isOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full md:w-20 md:translate-x-0"}
@@ -104,7 +104,7 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
             }
           `}</style>
 
-          <nav className="space-y-2 pb-4 border-b border-white/[0.04]">
+          <nav className="space-y-2 pb-4 border-b border-white/4">
             <NavLink icon={Home} href="/dashboard" label="Dashboard" isOpen={isOpen} />
             <NavLink icon={Layout} href="/workspaces" label="Workspaces" isOpen={isOpen} />
             <NavLink icon={Heart} label="Favorites" isOpen={isOpen} />

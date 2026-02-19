@@ -28,7 +28,7 @@ export default function NavLink({ icon: Icon, label, active = false, isOpen, hre
         relative overflow-hidden
         ${(active || isActiveLink)
                     ? `
-              bg-gradient-to-r from-indigo-600/90 to-indigo-600/70
+              bg-linear-to-r from-indigo-600/90 to-indigo-600/70
               border-indigo-500/50
               text-white
               shadow-lg shadow-indigo-600/20
@@ -46,12 +46,12 @@ export default function NavLink({ icon: Icon, label, active = false, isOpen, hre
       `}
         >
             {!active && !isActiveLink && (
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/0 to-indigo-600/0 group-hover:from-indigo-600/5 group-hover:to-indigo-600/0 transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-indigo-600/0 to-indigo-600/0 group-hover:from-indigo-600/5 group-hover:to-indigo-600/0 transition-all duration-300"></div>
             )}
 
             <Icon
                 className={`
-          w-5 h-5 flex-shrink-0 transition-all duration-300 ease-out relative z-10
+          w-5 h-5 shrink-0 transition-all duration-300 ease-out relative z-10
           ${(active || isActiveLink) ? "text-white" : "text-neutral-400 group-hover:text-indigo-300 group-hover:scale-110"}
         `}
             />

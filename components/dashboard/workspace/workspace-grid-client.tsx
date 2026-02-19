@@ -131,15 +131,15 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                   size="sm"
                   className="
                     relative flex items-center gap-2 
-                    bg-gradient-to-br from-neutral-800/80 to-neutral-900/80
+                    bg-linear-to-br from-neutral-800/80 to-neutral-900/80
                     backdrop-blur-lg
-                    border border-white/[0.05]
+                    border border-white/5
                     text-sm text-neutral-100
                     rounded-lg px-3 py-2 
                     cursor-pointer
                     transition-all duration-500 ease-out
                     hover:border-indigo-500/50 
-                    hover:bg-gradient-to-br hover:from-neutral-700/80 hover:to-neutral-800/80
+                    hover:bg-linear-to-br hover:from-neutral-700/80 hover:to-neutral-800/80
                     hover:text-indigo-300
                     hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)]
                     active:scale-95
@@ -163,7 +163,7 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
                 w-44 
                 bg-neutral-900/80 
                 backdrop-blur-lg
-                border border-white/[0.05]
+                border border-white/5
                 rounded-lg 
                 shadow-[0_8px_32px_rgba(0,0,0,0.3)]
                 p-1
@@ -218,9 +218,9 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
             bg-neutral-900/50 
             backdrop-blur-lg
             p-1 rounded-lg 
-            border border-white/[0.05]
+            border border-white/5
             transition-all duration-500
-            hover:border-white/[0.1]
+            hover:border-white/1
             hover:shadow-[0_8px_32px_rgba(99,102,241,0.1)]
           "
           whileHover={{ boxShadow: "0 8px 32px rgba(99, 102, 241, 0.15)" }}

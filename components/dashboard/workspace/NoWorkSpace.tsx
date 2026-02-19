@@ -68,7 +68,7 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
         <motion.div
           variants={floatingVariants}
           animate="animate"
-          className="relative z-10 flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-indigo-600/20 to-indigo-600/5 border border-indigo-600/40"
+          className="relative z-10 flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-indigo-600/20 to-indigo-600/5 border border-indigo-600/40"
         >
           <svg className="w-12 h-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path

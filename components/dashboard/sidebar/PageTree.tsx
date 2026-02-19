@@ -65,7 +65,7 @@ export default function PageTree({
                                         toggleExpand(page.id);
                                     }}
                                     className={`
-                        p-1 flex-shrink-0 transition-all duration-300 ease-out
+                        p-1 shrink-0 transition-all duration-300 ease-out
                         text-neutral-500 hover:text-indigo-400
                         ${isCurrentlyExpanded ? "rotate-90" : "rotate-0"}
                         hover:bg-neutral-800/50 rounded-md
@@ -78,16 +78,16 @@ export default function PageTree({
                             )}
 
                             {!hasChildren && isOpen && (
-                                <div className="w-5 flex-shrink-0 mr-1"></div>
+                                <div className="w-5 shrink-0 mr-1"></div>
                             )}
 
                             <Link
                                 href={workspaceId ? `/dashboard/workspace/${workspaceId}/page/${page.id}` : "#"}
                                 className={`
-                  flex items-center gap-2 py-2 rounded-lg transition-all duration-300 ease-out text-sm w-full min-h-[36px]
+                  flex items-center gap-2 py-2 rounded-lg transition-all duration-300 ease-out text-sm w-full min-h-9
                   ${isOpen ? "pl-2 pr-3" : "justify-center w-8 h-8 p-0"}
                   ${isActive
-                                        ? "bg-gradient-to-r from-indigo-600/90 to-indigo-600/70 text-white font-medium shadow-lg shadow-indigo-600/20 border border-indigo-500/40"
+                                        ? "bg-linear-to-r from-indigo-600/90 to-indigo-600/70 text-white font-medium shadow-lg shadow-indigo-600/20 border border-indigo-500/40"
                                         : "text-neutral-300 hover:text-white border border-transparent hover:bg-neutral-800/60 hover:border-indigo-500/30"
                                     }
                   hover:shadow-md hover:shadow-indigo-500/10
@@ -97,17 +97,17 @@ export default function PageTree({
                                 title={page.title}
                             >
                                 {isActive && (
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
                                 )}
 
                                 <span className="flex items-center gap-2 relative z-10">
                                     <div
-                                        className={`flex-shrink-0 transition-all duration-300 ${isActive ? "scale-110" : "scale-100 group-hover:scale-110"}`}
+                                        className={`shrink-0 transition-all duration-300 ${isActive ? "scale-110" : "scale-100 group-hover:scale-110"}`}
                                     >
                                         {getPageIcon(page.icon)}
                                     </div>
                                     {isOpen && <span className="truncate">{page.title}</span>}
-                                    {!isOpen && <div className="flex-shrink-0 transition-all duration-300 group-hover:scale-110"><FileText className="size-5" /></div>}
+                                    {!isOpen && <div className="shrink-0 transition-all duration-300 group-hover:scale-110"><FileText className="size-5" /></div>}
                                 </span>
                             </Link>
                         </div>

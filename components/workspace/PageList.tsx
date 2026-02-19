@@ -29,7 +29,7 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
   }
 
   return (
-    <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 min-h-screen p-6">
+    <div className="bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50 min-h-screen p-6">
       <div className="flex justify-between items-center mb-8 pb-6 border-b border-neutral-700/30">
         <div>
           <h2 className="text-3xl font-semibold text-white mb-1">Root Pages</h2>
@@ -42,7 +42,7 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
           <Button
             onClick={() => setIsModalOpen(true)}
             className="
-              bg-gradient-to-r from-indigo-600 to-indigo-600
+              bg-linear-to-r from-indigo-600 to-indigo-600
               hover:from-indigo-500 hover:to-indigo-600
               text-white font-semibold
               shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50
@@ -70,7 +70,7 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
               className="
                 flex cursor-pointer items-center justify-between p-4
                 relative overflow-hidden
-                bg-gradient-to-br from-neutral-800 via-neutral-850 to-neutral-900
+                bg-linear-to-br from-neutral-800 via-neutral-850 to-neutral-900
                 border border-neutral-700/50
                 hover:border-indigo-500/50
                 rounded-xl
@@ -86,19 +86,19 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
               }}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 to-transparent"></div>
               </div>
 
               <div className="relative flex items-center gap-4 flex-1 min-w-0">
                 <div
                   className="
                     p-2.5
-                    bg-gradient-to-br from-neutral-700 to-neutral-750
+                    bg-linear-to-br from-neutral-700 to-neutral-750
                     group-hover:from-indigo-600/40 group-hover:to-indigo-500/20
                     rounded-lg transition-all duration-500 ease-out
                     group-hover:scale-110
                     group-hover:shadow-lg group-hover:shadow-indigo-500/20
-                    flex-shrink-0
+                    shrink-0
                   "
                 >
                   <ListTodo className="h-5 w-5 text-neutral-300 group-hover:text-indigo-300 transition-colors duration-500" />
@@ -121,21 +121,21 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
           relative overflow-hidden
           border border-neutral-700/50
           rounded-xl
-          bg-gradient-to-br from-neutral-800/50 via-neutral-850/50 to-neutral-900/50
+          bg-linear-to-br from-neutral-800/50 via-neutral-850/50 to-neutral-900/50
           backdrop-blur-sm
           shadow-[0_8px_32px_rgba(99,102,241,0.1)]
           group
         "
         >
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 to-transparent"></div>
           </div>
 
           <div className="relative">
             <div
               className="
               p-4
-              bg-gradient-to-br from-neutral-700/50 to-neutral-800/50
+              bg-linear-to-br from-neutral-700/50 to-neutral-800/50
               rounded-full
               mb-4
               group-hover:shadow-lg group-hover:shadow-indigo-500/20
@@ -156,7 +156,7 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
               <Button
                 onClick={() => setIsModalOpen(true)}
                 className="
-                  bg-gradient-to-r from-indigo-600 to-indigo-600
+                  bg-linear-to-r from-indigo-600 to-indigo-600
                   hover:from-indigo-500 hover:to-indigo-600
                   text-white font-semibold
                   shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50

@@ -20,7 +20,7 @@ export default async function WorkspacePage({ params }: WorkspacePageProps) {
   }
 
   const userId = (await getServerSession(authOptions))?.user?.id;
-  if (!userId) {
+  if (!userId) { 
     redirect('/login');
   }
 

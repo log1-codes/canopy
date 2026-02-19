@@ -71,7 +71,7 @@ export default function NewWorkspaceModal({ open, onOpenChange }: NewWorkspaceMo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 sm:max-w-md border-neutral-800">
+            <DialogContent className="bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50 sm:max-w-md border-neutral-800">
                 <div className="flex flex-col gap-2">
                     <DialogHeader>
                         <DialogTitle className="text-white">Create New Workspace</DialogTitle>

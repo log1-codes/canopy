@@ -74,7 +74,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 flex items-center justify-center p-6">
+    <main className="min-h-screen bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-extrabold">Canopy</h1>
@@ -83,7 +83,7 @@ export default function LoginPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 p-8 rounded-3xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/[0.04] shadow-2xl"
+          className="space-y-6 p-8 rounded-3xl bg-linear-to-br from-white/3 to-white/1 backdrop-blur-sm border border-white/4 shadow-2xl"
         >
           <label className="block text-sm">
             <span className="text-neutral-300">Email</span>

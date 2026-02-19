@@ -80,7 +80,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50  sm:max-w-md">
+            <DialogContent className="bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50  sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-white">Create New Page</DialogTitle>
                 </DialogHeader>
@@ -90,7 +90,7 @@ export default function NewPageModal({ open, onOpenChange, workspaceId, parentId
                         placeholder="e.g. Project Plan, Daily Notes"
                         value={pageTitle}
                         onChange={(e) => setPageTitle(e.target.value)}
-                        className="bg-neutral-900 border border-neutral-800 text-neutral-50  border border-white/[0.04] shadow-2xl  focus:ring-indigo-600 focus:ring-offset-gray-900"
+                        className="bg-neutral-900   text-neutral-50  border border-white/4 shadow-2xl  focus:ring-indigo-600 focus:ring-offset-gray-900"
                         disabled={isLoading}
                     />
                 </div>

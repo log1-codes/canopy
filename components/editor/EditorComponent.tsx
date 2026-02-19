@@ -152,7 +152,7 @@ export function EditorComponent({
   }, [unsavedChanges])
 
   return (
-    <div className="flex flex-col h-full overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-950 to-neutral-900 text-foreground">
+    <div className="flex flex-col h-full overflow-hidden bg-linear-to-br from-neutral-950 via-neutral-950 to-neutral-900 text-foreground">
       <header className="flex justify-between items-center h-12 sticky top-0 z-20 border-b border-neutral-800/50 bg-neutral-950/80 backdrop-blur-sm px-5">
         <div className="flex items-center gap-3">
           {effectiveEditable && (
@@ -230,7 +230,7 @@ export function EditorComponent({
         </div>
       </header>
 
-      <div className="flex-grow overflow-y-auto scroll-smooth">
+      <div className="grow overflow-y-auto scroll-smooth">
         <div className="mx-auto max-w-7xl px-4 py-4">
           <TiptapEditor
             initialContent={content}

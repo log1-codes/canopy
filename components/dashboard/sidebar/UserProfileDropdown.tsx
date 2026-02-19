@@ -31,7 +31,7 @@ export default function UserProfileDropdown({ isOpen, user, onLogout }: UserProf
         <div
             ref={dropdownRef}
             className={`
-        p-3 border-t border-white/[0.04]
+        p-3 border-t border-white/4
         flex relative transition-all duration-500 ease-out
         ${isOpen ? "gap-3 items-center" : "flex-col items-center gap-2"}
       `}
@@ -51,7 +51,7 @@ export default function UserProfileDropdown({ isOpen, user, onLogout }: UserProf
                     <AvatarFallback
                         className="
               text-white font-medium
-              bg-gradient-to-br from-indigo-600 to-indigo-800
+              bg-linear-to-br from-indigo-600 to-indigo-800
               transition-all duration-500 ease-out
               group-hover:shadow-lg group-hover:shadow-indigo-600/30
             "

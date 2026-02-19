@@ -37,7 +37,7 @@ export default function Topbar({ onMenuClick, user, onLogout }: TopbarProps) {
   }, [dropdownRef]); 
 
   return (
-    <header className="h-16 bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 px-6 flex items-center justify-between md:justify-end gap-4 md:gap-6 shadow-xl ">
+    <header className="h-16 bg-linear-to-br from-neutral-900 to-neutral-950 text-neutral-50 px-6 flex items-center justify-between md:justify-end gap-4 md:gap-6 shadow-xl ">
       <button
         onClick={onMenuClick}
         className="md:hidden p-1.5 hover:bg-neutral-800 rounded-lg transition-colors"
@@ -71,7 +71,7 @@ export default function Topbar({ onMenuClick, user, onLogout }: TopbarProps) {
         >
           <Avatar className="h-8 w-8">
             <AvatarFallback
-              className="text-white font-medium bg-gradient-to-br from-indigo-600 to-indigo-800"
+              className="text-white font-medium bg-linear-to-br from-indigo-600 to-indigo-800"
             >
               {avatarInitials}
             </AvatarFallback>
