@@ -12,7 +12,6 @@ import {
   Plus,
 } from "lucide-react"
 import { debounce } from "@/app/lib/utils"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import dynamic from "next/dynamic"
 import "../editor/tiptap-editor-styles.css"
@@ -56,7 +55,6 @@ export function EditorComponent({
   const [status, setStatus] = useState<"saved" | "saving" | "error" | "unsaved">("saved")
   const [lastSaved, setLastSaved] = useState(initialData.updatedAt)
   const [unsavedChanges, setUnsavedChanges] = useState(false)
-  const [isHeaderFocused, setIsHeaderFocused] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [isModalOpen, setModalOpen] = useState(false)
 
@@ -155,75 +153,48 @@ export function EditorComponent({
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-gradient-to-br from-neutral-950 via-neutral-950 to-neutral-900 text-foreground">
-      {/* Header */}
-      <header
-        className={cn(
-          "flex justify-between items-center h-16 sticky top-0 z-20",
-          "border-b border-neutral-800/50 bg-neutral-950/80 backdrop-blur-sm",
-          isHeaderFocused &&
-          "bg-neutral-950 border-neutral-700/50 shadow-lg shadow-neutral-950/20"
-        )}
-      >
-        {/* Left side: title */}
-        <div className="flex flex-grow items-center gap-4 px-6">
-          <Input
-            value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-            onFocus={() => setIsHeaderFocused(true)}
-            onBlur={() => setIsHeaderFocused(false)}
-            className={cn(
-              "text-2xl font-bold tracking-tight bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-neutral-700",
-              !effectiveEditable && "cursor-not-allowed text-neutral-600",
-              effectiveEditable && "text-neutral-50"
-            )}
-            placeholder="Untitled Page"
-            disabled={!effectiveEditable}
-          />
-        </div>
-
-        {/* Right side controls */}
-        <div className="flex items-center gap-3 px-6">
-          {/* Status indicator */}
+      <header className="flex justify-between items-center h-12 sticky top-0 z-20 border-b border-neutral-800/50 bg-neutral-950/80 backdrop-blur-sm px-5">
+        <div className="flex items-center gap-3">
           {effectiveEditable && (
             <div
               className={cn(
-                "flex items-center gap-2 text-sm font-medium px-2 py-1 rounded-md",
+                "flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-md",
                 status === "error" && "text-red-400",
                 status === "saved" && "text-emerald-400",
                 (status === "saving" || status === "unsaved") && "text-neutral-400"
               )}
             >
-              {status === "saving" && <Loader2 className="h-4 w-4 animate-spin" />}
-              {status === "saved" && <CheckCircle className="h-4 w-4" />}
-              {status === "error" && <AlertTriangle className="h-4 w-4" />}
-              {status === "unsaved" && <Save className="h-4 w-4 animate-pulse" />}
+              {status === "saving" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {status === "saved" && <CheckCircle className="h-3.5 w-3.5" />}
+              {status === "error" && <AlertTriangle className="h-3.5 w-3.5" />}
+              {status === "unsaved" && <Save className="h-3.5 w-3.5 animate-pulse" />}
               <span className="hidden sm:inline capitalize">{status}</span>
             </div>
           )}
 
-          {/* Manual Save */}
           {effectiveEditable && unsavedChanges && (
             <Button
               onClick={handleManualSave}
               variant="ghost"
               size="sm"
-              className="px-3 py-1.5 h-auto text-sm font-medium bg-neutral-800 hover:bg-neutral-700 text-neutral-100 rounded-md"
+              className="px-2.5 py-1 h-7 text-xs font-medium bg-neutral-800 hover:bg-neutral-700 text-neutral-100 rounded-md"
               disabled={status === "saving"}
               title="Save Page Manually (Ctrl+S)"
             >
-              <SaveAll className={cn("h-4 w-4 mr-2", status === "saving" && "animate-spin")} />
+              <SaveAll className={cn("h-3.5 w-3.5 mr-1.5", status === "saving" && "animate-spin")} />
               {status === "saving" ? "Saving" : "Save"}
             </Button>
           )}
+        </div>
 
-          {/* Edit/View Mode Toggle */}
+        <div className="flex items-center gap-2">
           {isEditable && (
             <Button
               onClick={handleToggleEditMode}
               variant="outline"
               size="sm"
               className={cn(
-                "flex items-center gap-2 text-sm border-neutral-700 transition-all cursor-pointer",
+                "flex items-center gap-1.5 text-xs h-7 border-neutral-700 transition-all cursor-pointer",
                 editMode
                   ? "bg-amber-500/10 border-amber-600/50 text-amber-400 hover:bg-amber-500/20"
                   : "bg-emerald-500/10 border-emerald-600/50 text-emerald-400 hover:bg-emerald-500/20"
@@ -231,74 +202,71 @@ export function EditorComponent({
             >
               {editMode ? (
                 <>
-                  <Eye className="h-4 w-4" /> View Mode
+                  <Eye className="h-3.5 w-3.5" /> View
                 </>
               ) : (
                 <>
-                  <Edit3 className="h-4 w-4" /> Edit Mode
+                  <Edit3 className="h-3.5 w-3.5" /> Edit
                 </>
               )}
             </Button>
           )}
 
-          {/* ➕ Add Subpage */}
           {isEditable && (
             <Button
               onClick={() => setModalOpen(true)}
               variant="ghost"
               size="sm"
-              className="text-indigo-400 hover:bg-indigo-600/10"
+              className="text-indigo-400 hover:bg-indigo-600/10 text-xs h-7"
               title="Add Subpage"
             >
-              <Plus className="h-4 w-4 mr-1" /> Subpage
+              <Plus className="h-3.5 w-3.5 mr-1" /> Subpage
             </Button>
           )}
 
-          <span className="text-neutral-500 hidden sm:block text-xs font-medium min-w-[80px] text-right">
+          <span className="text-neutral-500 hidden sm:block text-xs font-medium min-w-[70px] text-right">
             {lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </span>
         </div>
       </header>
 
-      {/* Content */}
       <div className="flex-grow overflow-y-auto scroll-smooth">
-        {/* Info banners */}
-        {!editMode && (
-          <div
-            className={cn(
-              "mx-auto max-w-4xl px-6 py-3 mt-6 rounded-lg text-sm font-medium",
-              isEditable
-                ? "bg-blue-500/10 border border-blue-700/30 text-blue-400"
-                : "bg-neutral-800/50 border border-neutral-700/30 text-neutral-400"
-            )}
-          >
-            {isEditable ? (
-              <>
-                You're viewing this page in <strong>read-only mode</strong>. Click{" "}
-                <strong>"Edit Mode"</strong> above to make changes.
-              </>
-            ) : (
-              <> You have <strong>view-only</strong> access to this page.</>
-            )}
-          </div>
-        )}
-
-        {editMode && (
-          <div className="mx-auto max-w-4xl px-6 py-3 mt-6 bg-emerald-500/10 border border-emerald-700/30 rounded-lg text-emerald-400 text-sm font-medium">
-            <strong>Edit mode active</strong> - Your changes will be saved automatically
-          </div>
-        )}
-
-        <div className="mx-auto max-w-4xl px-6 py-8">
+        <div className="mx-auto max-w-7xl px-4 py-4">
           <TiptapEditor
             initialContent={content}
             onUpdate={handleContentChange}
             isEditable={effectiveEditable}
+            title={title}
+            onTitleChange={handleTitleChange}
           />
         </div>
       </div>
 
-      {/* Subpage Creation Modal */}
+      {!editMode && (
+        <div
+          className={cn(
+            "px-5 py-2.5 text-xs font-medium border-t",
+            isEditable
+              ? "bg-blue-500/10 border-blue-700/30 text-blue-400"
+              : "bg-neutral-800/50 border-neutral-700/30 text-neutral-400"
+          )}
+        >
+          {isEditable ? (
+            <>
+              Viewing in <strong>read-only mode</strong> — click <strong>"Edit"</strong> above to make changes.
+            </>
+          ) : (
+            <> You have <strong>view-only</strong> access to this page.</>
+          )}
+        </div>
+      )}
+
+      {editMode && (
+        <div className="px-5 py-2.5 text-xs font-medium border-t bg-emerald-500/10 border-emerald-700/30 text-emerald-400">
+          <strong>Edit mode active</strong> — changes saved automatically
+        </div>
+      )}
+
       <NewPageModal
         open={isModalOpen}
         onOpenChange={() => setModalOpen(false)}

@@ -10,38 +10,8 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
-        name: { label: "Name", type: "text" },
       },
       async authorize(credentials) {
-        if (credentials?.name) {
-          if (!credentials.email || !credentials.password || !credentials.name.trim()) {
-            throw new Error("Missing signup credentials (Name, Email, or Password).");
-          }
-
-          const existingUser = await prisma.user.findUnique({
-            where: { email: credentials.email },
-          });
-
-          if (existingUser) {
-            throw new Error("User already exists with this email");
-          }
-
-          const hashedPassword = await bcrypt.hash(credentials.password, 12);
-          const user = await prisma.user.create({
-            data: {
-              email: credentials.email,
-              name: credentials.name,
-              password: hashedPassword,
-            },
-          });
-
-          return {
-            id: user.id.toString(),
-            email: user.email,
-            name: user.name,
-          };
-        }
-
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required for login");
         }

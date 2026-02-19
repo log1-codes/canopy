@@ -94,7 +94,6 @@ export default function ResetPasswordForm() {
           onSubmit={handleSubmit}
           className="space-y-6 p-8 rounded-3xl bg-gradient-to-br from-white/[0.03] to-white/[0.01] backdrop-blur-sm border border-white/[0.04] shadow-2xl"
         >
-          {/* New Password */}
           <div className="flex flex-col space-y-2">
             <label className="text-sm text-neutral-300">New Password</label>
             <div className="relative">
@@ -114,13 +113,11 @@ export default function ResetPasswordForm() {
               </button>
             </div>
 
-            {/* Password strength indicators */}
             {password.length > 0 && (
               <PasswordRequirementsGrid complexity={complexity} />
             )}
           </div>
 
-          {/* Confirm Password */}
           <div className="flex flex-col space-y-2">
             <label className="text-sm text-neutral-300">Confirm Password</label>
             <div className="relative">
@@ -141,7 +138,6 @@ export default function ResetPasswordForm() {
             </div>
           </div>
 
-          {/* Submit Button */}
           <Button
             type="submit"
             className={`w-full h-12 ${loading

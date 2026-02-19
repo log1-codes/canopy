@@ -30,7 +30,6 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
 
   return (
     <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 text-neutral-50 min-h-screen p-6">
-      {/* Header Section */}
       <div className="flex justify-between items-center mb-8 pb-6 border-b border-neutral-700/30">
         <div>
           <h2 className="text-3xl font-semibold text-white mb-1">Root Pages</h2>
@@ -62,7 +61,6 @@ export function PageList({ workspaceId, rootPages, userRole, workspaceName }: Pa
         )}
       </div>
 
-      {/* Page List Section */}
       {rootPages.length > 0 ? (
         <div className="space-y-3">
           {rootPages.map((page, index) => (

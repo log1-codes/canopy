@@ -28,12 +28,9 @@ const DashboardClient = ({ user, initialSidebarState, workspaceContent }: Dashbo
         user={user}
       />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
         <Topbar onLogout={() => handleSignOut()} user={user} onMenuClick={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
 
-        {/* Main Content Area */}
         <main className="flex-1 overflow-auto bg-gradient-to-br from-neutral-900 to-neutral-950">
           {workspaceContent}
         </main>

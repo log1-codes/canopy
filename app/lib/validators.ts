@@ -5,7 +5,7 @@ export const CreateWorkspaceSchema = z.object({
         .min(3, { message: "Workspace name must be at least 3 characters." })
         .max(50, { message: "Workspace name must not exceed 50 characters." })
         .trim(),
-        desc: z.string().optional()
+    desc: z.string().optional()
 });
 
 export const CreatePageSchema = z.object({
@@ -17,9 +17,27 @@ export const CreatePageSchema = z.object({
         .trim()
 })
 
+const TiptapNodeSchema: z.ZodType<any> = z.lazy(() =>
+    z.object({
+        type: z.string(),
+        attrs: z.record(z.string(), z.unknown()).optional(),
+        content: z.array(TiptapNodeSchema).optional(),
+        marks: z.array(z.object({
+            type: z.string(),
+            attrs: z.record(z.string(), z.unknown()).optional(),
+        })).optional(),
+        text: z.string().optional(),
+    })
+);
+
+const TiptapDocSchema = z.object({
+    type: z.literal("doc"),
+    content: z.array(TiptapNodeSchema).optional(),
+});
+
 export const UpdatePageSchema = z.object({
-    title :z.string().max(255).optional(), 
-    content: z.any().optional()
+    title: z.string().max(255).optional(),
+    content: TiptapDocSchema.optional()
 })
 
 
@@ -27,8 +45,8 @@ export const UpdateAccessSchema = z.object({
     email: z.string().email({ message: "Invalid email address." }),
     role: z.nativeEnum(UserRole).refine(role => role !== UserRole.OWNER, {
         message: "Cannot assign or update OWNER role via this API.",
-      }),
+    }),
 })
-export  const RemoveAccessSchema = z.object({
+export const RemoveAccessSchema = z.object({
     userId: z.string().cuid({ message: "Invalid user id." }),
 });

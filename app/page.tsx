@@ -38,7 +38,6 @@ export default function Home() {
   return (
 
     <main className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Hero Section */}
       <section className="w-full py-20 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className={`text-center space-y-6 md:space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
@@ -51,8 +50,8 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
               <Button
-                onClick={()=>handleNavigation("/login")}
-               className=" cursor-pointer h-14 px-10 text-base font-semibold bg-white text-black hover:bg-neutral-50 shadow-custom-lg hover:shadow-custom-2xl hover:scale-105 active:scale-95 transition-all duration-200 ease-smooth rounded-xl">
+                onClick={() => handleNavigation("/login")}
+                className=" cursor-pointer h-14 px-10 text-base font-semibold bg-white text-black hover:bg-neutral-50 shadow-custom-lg hover:shadow-custom-2xl hover:scale-105 active:scale-95 transition-all duration-200 ease-smooth rounded-xl">
                 Start for Free
               </Button>
               <Button
@@ -88,7 +87,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="w-full py-20 md:py-32 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 md:mb-20 animate-fade-in">
@@ -119,7 +117,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="w-full py-20 md:py-32 px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center space-y-8 md:space-y-10 p-12 md:p-16 rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-sm shadow-custom-2xl border border-white/[0.06] animate-fade-in">
@@ -136,7 +133,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="w-full py-16 md:py-20 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-12 md:pb-16">

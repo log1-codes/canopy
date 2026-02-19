@@ -23,7 +23,7 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"as const ,
+        ease: "easeOut" as const,
       },
     },
   }
@@ -33,7 +33,7 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
       y: [0, -12, 0],
       transition: {
         duration: 4,
-        ease: "easeInOut" as const ,
+        ease: "easeInOut" as const,
         repeat: Number.POSITIVE_INFINITY,
       },
     },
@@ -58,7 +58,6 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
       animate="visible"
       className="flex flex-col items-center justify-center py-20 px-4"
     >
-      {/* Decorative animated circles */}
       <motion.div className="relative w-40 h-40 mb-8 flex items-center justify-center" variants={itemVariants}>
         <motion.div
           variants={pulseVariants}
@@ -66,7 +65,6 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
           className="absolute inset-0 rounded-full bg-indigo-500/20 border border-indigo-500/30"
         />
 
-        {/* Floating icon container */}
         <motion.div
           variants={floatingVariants}
           animate="animate"
@@ -83,7 +81,6 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
         </motion.div>
       </motion.div>
 
-      {/* Text content */}
       <motion.div variants={itemVariants} className="text-center space-y-3">
         <h3 className="text-xl font-semibold text-neutral-200">No workspaces found</h3>
         <p className="text-neutral-400 text-sm max-w-xs">
@@ -97,7 +94,6 @@ export function NoWorkSpace({ query }: NoWorkSpaceProps) {
         </p>
       </motion.div>
 
-      {/* Animated dots */}
       <motion.div variants={itemVariants} className="flex gap-2 mt-8">
         {[0, 1, 2].map((i) => (
           <motion.div

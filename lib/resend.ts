@@ -1,27 +1,27 @@
 import { Resend } from "resend";
 export async function sendResetEmail(email: string, link: string) {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn(
-      "RESEND_API_KEY not set. Skipping sending email. Reset link:",
-      link
-    );
-    return;
-  }
+    if (!process.env.RESEND_API_KEY) {
+        console.warn(
+            "RESEND_API_KEY not set. Skipping sending email. Reset link:",
+            link
+        );
+        return;
+    }
 
-  const emailBg = "#101010";         
-  const emailCardBg = "#1A1A1A";     
-  const emailText = "#E2E8F0";        
-  const emailMutedText = "#94A3B8";  
-  const emailPrimaryAccent = "#58A6FF"; 
-  const emailError = "#EF4444";       
-  const resend = new Resend(process.env.RESEND_API_KEY);
+    const emailBg = "#101010";
+    const emailCardBg = "#1A1A1A";
+    const emailText = "#E2E8F0";
+    const emailMutedText = "#94A3B8";
+    const emailPrimaryAccent = "#58A6FF";
+    const emailError = "#EF4444";
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-  try {
-    await resend.emails.send({
-      from: "Canopy <onboarding@resend.dev>", 
-      to: email,
-      subject: "Reset your Canopy password", 
-      html: `
+    try {
+        await resend.emails.send({
+            from: "Canopy <onboarding@resend.dev>",
+            to: email,
+            subject: "Reset your Canopy password",
+            html: `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -174,7 +174,7 @@ export async function sendResetEmail(email: string, link: string) {
                     <tr>
                         <td style="padding: 20px 25px;">
                             <p style="margin: 0;">&copy; ${new Date().getFullYear()} Canopy. All rights reserved.</p>
-                            <p style="margin-top: 8px; margin-bottom: 0;"><a href="YOUR_WEBSITE_URL" style="color: ${emailMutedText};">Visit Canopy</a> | <a href="YOUR_PRIVACY_POLICY_URL" style="color: ${emailMutedText};">Privacy Policy</a></p>
+                            <p style="margin-top: 8px; margin-bottom: 0;"><a href="${process.env.NEXT_PUBLIC_APP_URL || '#'}" style="color: ${emailMutedText};">Visit Canopy</a> | <a href="${process.env.NEXT_PUBLIC_APP_URL || '#'}/privacy" style="color: ${emailMutedText};">Privacy Policy</a></p>
                         </td>
                     </tr>
                 </table>
@@ -182,9 +182,9 @@ export async function sendResetEmail(email: string, link: string) {
         </body>
         </html>
       `,
-    });
-  } catch (err) {
-    console.error("Failed to send reset email:", err);
-    throw err;
-  }
+        });
+    } catch (err) {
+        console.error("Failed to send reset email:", err);
+        throw err;
+    }
 }

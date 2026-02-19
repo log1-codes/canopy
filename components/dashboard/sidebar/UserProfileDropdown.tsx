@@ -68,7 +68,6 @@ export default function UserProfileDropdown({ isOpen, user, onLogout }: UserProf
                 </div>
             )}
 
-            {/* Dropdown Menu with enhanced animations */}
             {dropdownOpen && (
                 <div
                     className={`

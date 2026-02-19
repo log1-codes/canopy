@@ -8,7 +8,7 @@ import { useSignOut } from '@/hooks/useSignOut';
 import { useToast } from '@/components/ui/toast-provider';
 import { Button } from '@/components/ui/button';
 import SharingModal from '@/components/sharingModal';
-import { ArrowLeft, Compass, Home } from 'lucide-react';
+import { ArrowLeft, Compass } from 'lucide-react';
 
 interface WorkspaceClientLayoutProps {
   user: { name: string; email: string; avatarInitials: string };
@@ -49,10 +49,6 @@ export function WorkspaceClientLayout({
     router.push(`/dashboard/workspace/${workspaceId}/pages`);
   };
 
-  const handleGoToDashboard = () => {
-    router.push('/dashboard');
-  };
-
   return (
     <>
       <div className="flex h-screen">
@@ -64,52 +60,46 @@ export function WorkspaceClientLayout({
           workspaceId={workspaceId}
         />
         <div className="flex-1 flex flex-col overflow-hidden">
-          <header className="flex flex-wrap md:flex-nowrap md:items-center md:justify-between
-                   px-6 py-4 h-auto border-b border-white/10 bg-neutral-900/90 
-                   backdrop-blur-md">
-            <div className="flex items-center gap-3 flex-wrap">
+          <header className="flex items-center justify-between px-5 py-2.5 border-b border-white/10 bg-neutral-900/90 backdrop-blur-md">
+            <div className="flex items-center gap-2 min-w-0">
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={handleBackNavigate}
-                className="cursor-pointer text-neutral-50 hover:text-white"
+                className="cursor-pointer text-neutral-400 hover:text-white h-8 w-8 flex-shrink-0"
+                title="Go Back"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Back
               </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleGoToPages}
-                disabled={isOnWorkspacePages}
-                className="text-neutral-300 hover:text-white disabled:text-neutral-500"
-              >
-                <Compass className="h-4 w-4" />
-                Workspace Pages
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleGoToDashboard}
-                className="cursor-pointer text-neutral-50 hover:text-white"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Button>
+              <div className="flex items-center gap-2 min-w-0">
+                <h1 className="text-sm font-semibold text-white truncate max-w-[200px]">
+                  {workspaceName}
+                </h1>
+                <span className="text-xs uppercase tracking-wide text-indigo-400/80 font-medium px-1.5 py-0.5 bg-indigo-500/10 rounded">
+                  {userRole}
+                </span>
+              </div>
             </div>
 
-            <div className="flex flex-col select-none  min-w-[220px]">
-              <p className="text-lg font-semibold text-white truncate">{workspaceName}</p>
-              <p className="text-xs uppercase tracking-wide text-indigo-300">{userRole}</p>
-            </div>
+            <div className="flex items-center gap-1.5">
+              {!isOnWorkspacePages && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleGoToPages}
+                  className="text-neutral-400 hover:text-white text-xs h-8"
+                  title="View all pages"
+                >
+                  <Compass className="h-3.5 w-3.5 mr-1" />
+                  Pages
+                </Button>
+              )}
 
-            <div className="flex items-center gap-3 mt-2 md:mt-0">
               <Button
                 variant="outline"
                 size="sm"
-                className="cursor-pointer border-indigo-600/40 text-indigo-200 hover:bg-indigo-600/10"
+                className="cursor-pointer border-indigo-600/40 text-indigo-200 hover:bg-indigo-600/10 text-xs h-8"
                 onClick={handleShareClick}
               >
                 Share Access
@@ -118,7 +108,7 @@ export function WorkspaceClientLayout({
               <Button
                 variant="ghost"
                 size="sm"
-                className="cursor-pointer text-neutral-50 hover:text-white"
+                className="cursor-pointer text-neutral-400 hover:text-white text-xs h-8"
                 onClick={handleSignOut}
               >
                 Logout

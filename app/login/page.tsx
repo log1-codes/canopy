@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Login | Canopy',
     description: 'Access your account securely.',
-    url: 'http://localhost:3000/login',
+    url: 'https://canopy-olive.vercel.app/login',
     siteName: 'Canopy',
     images: [
       {

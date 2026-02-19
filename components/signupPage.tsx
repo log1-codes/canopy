@@ -51,35 +51,36 @@ export default function SignupPage() {
     setLoading(true)
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        name,
-        redirect: false,
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), password }),
       })
 
-      if (result?.error) {
-        let errorMessage = "Failed to create account. Please try again."
+      const data = await res.json()
 
-        if (result.error === "User already exists with this email") {
-          errorMessage = "A user already exists with this email address. Try logging in instead."
-        } else if (result.error === "Failed to create account") {
-          errorMessage = "Something went wrong during signup. Please try again."
-        } else {
-          errorMessage = result.error
-        }
-
-        setFormError(errorMessage)
-        showToast(`Error : ${errorMessage}`, "error", "top-right")
+      if (!res.ok) {
+        setFormError(data.error || "Failed to create account. Please try again.")
+        showToast(data.error || "Failed to create account.", "error", "top-right")
         setLoading(false)
         return
       }
 
-      if (result?.ok) {
-        showToast("Account created successfully! Redirecting...", "success", "top-right")
+      const signInResult = await signIn("credentials", {
+        email: email.trim(),
+        password,
+        redirect: false,
+      })
+
+      if (signInResult?.error) {
+        showToast("Account created! Please log in.", "success", "top-right")
         router.push("/login")
-        router.refresh()
+        return
       }
+
+      showToast("Account created successfully! Redirecting...", "success", "top-right")
+      router.push("/dashboard")
+      router.refresh()
     } catch (err) {
       setFormError("An unexpected error occurred. Please try again.")
       showToast("Something went wrong. Please try again.", "error", "top-right")
@@ -161,7 +162,6 @@ export default function SignupPage() {
             {loading ? "Signing up…" : "Sign up"}
           </Button>
 
-          {/* ✅ Improved Forgot Password placement */}
           <div className="text-center mt-3">
             <a href="/forgot-password" className="text-sm text-indigo-400 hover:text-indigo-300">
               Forgot password?

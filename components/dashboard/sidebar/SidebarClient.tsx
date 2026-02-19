@@ -88,7 +88,6 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
           ${!isOpen && "md:w-20"}
         `}
       >
-        {/* HEADER */}
         <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
         <div
@@ -105,7 +104,6 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
             }
           `}</style>
 
-          {/* Top Level Nav */}
           <nav className="space-y-2 pb-4 border-b border-white/[0.04]">
             <NavLink icon={Home} href="/dashboard" label="Dashboard" isOpen={isOpen} />
             <NavLink icon={Layout} href="/workspaces" label="Workspaces" isOpen={isOpen} />
@@ -131,14 +129,11 @@ export default function Sidebar({ isOpen, onToggle, user, onLogout, workspaceId 
           </div>
         </div>
 
-        {/* NEW WORKSPACE BUTTON */}
         <NewWorkspaceButton isOpen={isOpen} onClick={() => setIsModalOpen(true)} />
 
-        {/* USER PROFILE DROPDOWN */}
         <UserProfileDropdown isOpen={isOpen} user={user} onLogout={onLogout} />
       </div>
 
-      {/* MODAL */}
       <NewWorkspaceModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   )

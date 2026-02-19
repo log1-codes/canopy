@@ -116,7 +116,6 @@ export default function WorkspaceClient({ workspaces }: WorkspaceClientProps) {
         animate="visible"
         className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8"
       >
-        {/* Sort Dropdown */}
         <div className="flex items-center gap-3">
           <span className="text-neutral-400 text-sm">Sort by:</span>
 

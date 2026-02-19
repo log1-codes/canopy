@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Signup | Canopy',
     description: 'Access your account securely.',
-    url: 'http://localhost:3000/signup',
+    url: 'https://canopy-olive.vercel.app/signup',
     siteName: 'Canopy',
     images: [
       {
