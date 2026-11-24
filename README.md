@@ -2,7 +2,7 @@
 
 A collaborative, Notion-style notes app with workspaces, nested pages, a rich-text editor, and role-based sharing.
 
-**Live:** [canopy.anurag.engineer](https://canopy.anurag.engineer)
+**Live:** [canopy-olive.vercel.app](https://canopy-olive.vercel.app/)
 
 ## Features
 
